@@ -62,13 +62,12 @@
             margin: 0 auto;
         }
 
-        /* ---------- HEADER ---------- */
+        /* HEADER */
 
         .top {
             display: flex;
             align-items: center;
             gap: 12px;
-
             margin-bottom: 18px;
         }
 
@@ -120,11 +119,10 @@
             transition: width .35s ease;
         }
 
-        /* ---------- SCREEN ---------- */
+        /* SCREENS */
 
         .screen {
             display: none;
-
             animation: screenIn .35s ease;
         }
 
@@ -145,6 +143,8 @@
             }
 
         }
+
+        /* CARD */
 
         .card {
             padding: 25px;
@@ -204,7 +204,7 @@
             line-height: 1.5;
         }
 
-        /* ---------- INPUTS ---------- */
+        /* INPUTS */
 
         .field {
             margin-bottom: 15px;
@@ -226,8 +226,8 @@
 
             width: 100%;
 
-            border: 1px solid
-                rgba(255,255,255,.12);
+            border:
+                1px solid rgba(255,255,255,.12);
 
             border-radius: 18px;
 
@@ -277,7 +277,7 @@
 
         }
 
-        /* ---------- BUTTON ---------- */
+        /* BUTTON */
 
         .button {
 
@@ -319,8 +319,8 @@
 
             width: 100%;
 
-            border: 1px solid
-                rgba(255,255,255,.12);
+            border:
+                1px solid rgba(255,255,255,.12);
 
             border-radius: 20px;
 
@@ -339,7 +339,7 @@
 
         }
 
-        /* ---------- OPTIONS ---------- */
+        /* OPTIONS */
 
         .options {
 
@@ -352,9 +352,7 @@
         }
 
         .option {
-
             position: relative;
-
         }
 
         .option input {
@@ -401,7 +399,7 @@
 
         }
 
-        /* ---------- FILES ---------- */
+        /* FILES */
 
         .upload-area {
 
@@ -463,8 +461,8 @@
 
             padding: 13px 6px;
 
-            border: 1px solid
-                rgba(255,255,255,.1);
+            border:
+                1px solid rgba(255,255,255,.1);
 
             border-radius: 16px;
 
@@ -517,7 +515,7 @@
 
         }
 
-        /* ---------- CONFIRM ---------- */
+        /* CONFIRMATION */
 
         .summary {
 
@@ -558,6 +556,8 @@
             word-break: break-word;
 
         }
+
+        /* SUCCESS */
 
         .success {
 
@@ -773,7 +773,7 @@
                 <input
                     id="weight"
                     type="number"
-                    placeholder="Например, 75 кг"
+                    placeholder="Например, 50 кг"
                 >
 
             </div>
@@ -870,7 +870,7 @@
 
             <textarea
                 id="citizenship"
-                placeholder="Например: Украина"
+                placeholder="Например: Казахстан"
             ></textarea>
 
 
@@ -1059,8 +1059,6 @@
                 id="previews"
             ></div>
 
-
-            <!-- Временный скрытый выбор файлов -->
 
             <input
                 type="file"
@@ -1281,9 +1279,7 @@
 
 <script>
 
-    /* =========================
-       TELEGRAM
-    ========================= */
+    /* TELEGRAM */
 
     const tg = window.Telegram.WebApp;
 
@@ -1300,18 +1296,14 @@
     }
 
 
-    /* =========================
-       ПЕРЕМЕННЫЕ
-    ========================= */
+    /* VARIABLES */
 
     let currentScreen = 1;
 
     let files = [];
 
 
-    /* =========================
-       ПОЛЬЗОВАТЕЛЬ TELEGRAM
-    ========================= */
+    /* TELEGRAM USER */
 
     const telegramUser =
         tg.initDataUnsafe?.user;
@@ -1336,14 +1328,13 @@
             }
 
             nameInput.value = name;
+
         }
 
     }
 
 
-    /* =========================
-       ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
-    ========================= */
+    /* SCREEN SWITCH */
 
     function showScreen(number) {
 
@@ -1372,8 +1363,6 @@
         currentScreen = number;
 
 
-        /* Progress */
-
         if (number <= 7) {
 
             const percent =
@@ -1393,12 +1382,11 @@
         }
 
 
-        /* Back button */
-
         const back =
             document.getElementById(
                 "backButton"
             );
+
 
         if (number > 1 && number < 8) {
 
@@ -1421,9 +1409,7 @@
     }
 
 
-    /* =========================
-       НАЗАД
-    ========================= */
+    /* BACK */
 
     document
         .getElementById("backButton")
@@ -1443,9 +1429,7 @@
         );
 
 
-    /* =========================
-       ПРОДОЛЖИТЬ
-    ========================= */
+    /* NEXT */
 
     function nextScreen() {
 
@@ -1509,9 +1493,7 @@
     }
 
 
-    /* =========================
-       ТЕЛЕФОН
-    ========================= */
+    /* PHONE */
 
     document
         .getElementById("contactButton")
@@ -1527,9 +1509,7 @@
         );
 
 
-    /* =========================
-       ФАЙЛЫ
-    ========================= */
+    /* FILES */
 
     function choosePhoto() {
 
@@ -1693,9 +1673,7 @@
     }
 
 
-    /* =========================
-       ПОДТВЕРЖДЕНИЕ
-    ========================= */
+    /* SUMMARY */
 
     function updateSummary() {
 
@@ -1803,9 +1781,7 @@
     }
 
 
-    /* =========================
-       ОТПРАВКА
-    ========================= */
+    /* SUBMIT */
 
     function submitForm() {
 
@@ -1817,11 +1793,19 @@
 
 
         /*
-           Пока только демонстрация.
-           На следующем этапе здесь
-           подключим отправку данных
-           в базу и менеджеру.
+            Пока это демонстрация.
+
+            Позже здесь подключим:
+
+            1. Supabase Database
+            2. Supabase Storage
+            3. Загрузку фото
+            4. Загрузку видео
+            5. Cloudflare Worker
+            6. Проверку Telegram пользователя
+            7. Отправку заявки менеджеру
         */
+
 
         showScreen(8);
 
