@@ -14,7 +14,6 @@
 
     <title>Scout</title>
 
-    <!-- Telegram Mini App API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
@@ -39,20 +38,20 @@
                 "SF Pro Text",
                 sans-serif;
 
+            color: #fff;
+
             background:
                 radial-gradient(
                     circle at top,
-                    #242424 0%,
-                    #101010 45%,
-                    #000000 100%
+                    #292929 0%,
+                    #111 45%,
+                    #000 100%
                 );
 
-            color: #ffffff;
-
             padding:
-                calc(env(safe-area-inset-top) + 20px)
-                20px
-                calc(env(safe-area-inset-bottom) + 30px);
+                calc(env(safe-area-inset-top) + 18px)
+                18px
+                calc(env(safe-area-inset-bottom) + 25px);
 
             overflow-x: hidden;
         }
@@ -63,162 +62,543 @@
             margin: 0 auto;
         }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.08);
+        /* ---------- HEADER ---------- */
 
-            border: 1px solid rgba(255, 255, 255, 0.12);
+        .top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 18px;
+        }
+
+        .back-button {
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 15px;
+
+            background: rgba(255,255,255,.08);
+            color: #fff;
+
+            font-size: 20px;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-wrap {
+            flex: 1;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: rgba(255,255,255,.5);
+            margin-bottom: 7px;
+        }
+
+        .progress {
+            height: 5px;
+
+            background: rgba(255,255,255,.1);
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 14.28%;
+
+            background: #fff;
+
+            border-radius: 10px;
+
+            transition: width .35s ease;
+        }
+
+        /* ---------- SCREEN ---------- */
+
+        .screen {
+            display: none;
+
+            animation: screenIn .35s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes screenIn {
+
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+        }
+
+        .card {
+            padding: 25px;
+
+            border-radius: 28px;
+
+            background:
+                rgba(255,255,255,.08);
+
+            border:
+                1px solid rgba(255,255,255,.12);
 
             box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                0 20px 60px rgba(0,0,0,.35),
+                inset 0 1px 0 rgba(255,255,255,.08);
 
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
-
-            border-radius: 28px;
         }
 
-        .hero {
-            padding: 32px 24px;
-            text-align: center;
-
-            animation: appear 0.7s ease;
-        }
-
-        .logo {
-            width: 72px;
-            height: 72px;
-
-            margin: 0 auto 20px;
-
-            border-radius: 22px;
+        .icon {
+            width: 58px;
+            height: 58px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            font-size: 34px;
+            border-radius: 18px;
+
+            margin-bottom: 20px;
+
+            font-size: 27px;
 
             background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.22),
-                    rgba(255,255,255,0.05)
-                );
+                rgba(255,255,255,.1);
 
-            box-shadow:
-                inset 0 1px 1px rgba(255,255,255,0.2),
-                0 15px 40px rgba(0,0,0,0.3);
+            border:
+                1px solid rgba(255,255,255,.1);
         }
 
         h1 {
-            margin: 0;
+            margin: 0 0 9px;
 
-            font-size: 34px;
-            line-height: 1.05;
+            font-size: 30px;
+            line-height: 1.1;
 
-            letter-spacing: -1.5px;
+            letter-spacing: -1px;
         }
 
-        .subtitle {
-            margin: 14px 0 0;
+        .description {
+            margin: 0 0 25px;
 
-            font-size: 17px;
-            line-height: 1.45;
+            color: rgba(255,255,255,.55);
 
-            color: rgba(255,255,255,0.65);
-        }
-
-        .user-card {
-            margin-top: 16px;
-            padding: 18px 20px;
-
-            display: none;
-
-            animation: appear 0.5s ease;
-        }
-
-        .user-label {
-            font-size: 13px;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 5px;
-        }
-
-        .user-name {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .section {
-            margin-top: 16px;
-            padding: 22px;
-
-            animation: appear 0.8s ease;
-        }
-
-        .section-title {
-            font-size: 21px;
-            font-weight: 700;
-
-            margin-bottom: 8px;
-        }
-
-        .section-text {
             font-size: 15px;
             line-height: 1.5;
-
-            color: rgba(255,255,255,0.62);
         }
 
-        .button {
+        /* ---------- INPUTS ---------- */
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            color:
+                rgba(255,255,255,.65);
+        }
+
+        input,
+        textarea {
+
             width: 100%;
 
-            margin-top: 20px;
+            border: 1px solid
+                rgba(255,255,255,.12);
+
+            border-radius: 18px;
+
+            padding: 16px;
+
+            background:
+                rgba(255,255,255,.07);
+
+            color: #fff;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 16px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease;
+
+        }
+
+        input:focus,
+        textarea:focus {
+
+            border-color:
+                rgba(255,255,255,.35);
+
+            background:
+                rgba(255,255,255,.1);
+
+        }
+
+        textarea {
+
+            min-height: 150px;
+
+            resize: vertical;
+
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+
+            color:
+                rgba(255,255,255,.3);
+
+        }
+
+        /* ---------- BUTTON ---------- */
+
+        .button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 20px;
 
             padding: 17px 20px;
 
-            border: none;
-            border-radius: 20px;
+            margin-top: 10px;
 
-            background: #ffffff;
-            color: #000000;
+            background: #fff;
+
+            color: #000;
 
             font-size: 17px;
+
             font-weight: 700;
 
             cursor: pointer;
 
             transition:
-                transform 0.15s ease,
-                opacity 0.15s ease;
+                transform .15s ease,
+                opacity .15s ease;
+
         }
 
         .button:active {
-            transform: scale(0.97);
-            opacity: 0.8;
+
+            transform: scale(.97);
+
+            opacity: .8;
+
         }
 
-        .footer {
-            padding: 25px 10px;
+        .secondary-button {
+
+            width: 100%;
+
+            border: 1px solid
+                rgba(255,255,255,.12);
+
+            border-radius: 20px;
+
+            padding: 16px 20px;
+
+            margin-top: 10px;
+
+            background:
+                rgba(255,255,255,.07);
+
+            color: #fff;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+        }
+
+        /* ---------- OPTIONS ---------- */
+
+        .options {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+        }
+
+        .option {
+
+            position: relative;
+
+        }
+
+        .option input {
+
+            position: absolute;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+        }
+
+        .option label {
+
+            display: block;
+
+            padding: 17px 18px;
+
+            border-radius: 18px;
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            background:
+                rgba(255,255,255,.06);
+
+            color:
+                rgba(255,255,255,.75);
+
+            font-size: 16px;
+
+            transition:
+                .2s ease;
+
+        }
+
+        .option input:checked + label {
+
+            background: #fff;
+
+            color: #000;
+
+            border-color: #fff;
+
+        }
+
+        /* ---------- FILES ---------- */
+
+        .upload-area {
+
+            padding: 25px 18px;
 
             text-align: center;
 
-            font-size: 13px;
+            border-radius: 22px;
 
-            color: rgba(255,255,255,0.35);
+            border:
+                1px dashed rgba(255,255,255,.2);
+
+            background:
+                rgba(255,255,255,.04);
+
         }
 
-        @keyframes appear {
+        .upload-icon {
 
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
+            font-size: 34px;
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            margin-bottom: 10px;
+
+        }
+
+        .upload-title {
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+        }
+
+        .upload-description {
+
+            margin-top: 7px;
+
+            font-size: 13px;
+
+            color:
+                rgba(255,255,255,.4);
+
+        }
+
+        .file-buttons {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+
+            margin-top: 15px;
+
+        }
+
+        .file-button {
+
+            padding: 13px 6px;
+
+            border: 1px solid
+                rgba(255,255,255,.1);
+
+            border-radius: 16px;
+
+            background:
+                rgba(255,255,255,.07);
+
+            color: #fff;
+
+            font-size: 13px;
+
+        }
+
+        .previews {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+
+            margin-top: 15px;
+
+        }
+
+        .preview {
+
+            aspect-ratio: 1;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            background: #111;
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            position: relative;
+
+        }
+
+        .preview img,
+        .preview video {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+        /* ---------- CONFIRM ---------- */
+
+        .summary {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+        }
+
+        .summary-item {
+
+            padding: 14px 15px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(255,255,255,.06);
+
+        }
+
+        .summary-label {
+
+            font-size: 12px;
+
+            color:
+                rgba(255,255,255,.4);
+
+            margin-bottom: 4px;
+
+        }
+
+        .summary-value {
+
+            font-size: 15px;
+
+            word-break: break-word;
+
+        }
+
+        .success {
+
+            text-align: center;
+
+            padding: 45px 20px;
+
+        }
+
+        .success-icon {
+
+            font-size: 60px;
+
+            margin-bottom: 20px;
+
+        }
+
+        .success h1 {
+
+            margin-bottom: 12px;
+
+        }
+
+        .success p {
+
+            color:
+                rgba(255,255,255,.55);
+
+            line-height: 1.5;
+
+        }
+
+        .error {
+
+            display: none;
+
+            margin-top: 10px;
+
+            color: #ff6b6b;
+
+            font-size: 14px;
 
         }
 
@@ -226,132 +606,1225 @@
 
 </head>
 
+
 <body>
 
 <div class="app">
 
-    <div class="glass hero">
 
-        <div class="logo">
-            🚀
-        </div>
+    <!-- HEADER -->
 
-        <h1>
-            Scout
-        </h1>
-
-        <p class="subtitle">
-            Добро пожаловать в наше приложение
-        </p>
+    <div class="top">
 
         <button
-            class="button"
-            id="startButton"
+            class="back-button"
+            id="backButton"
         >
-            Начать
+            ‹
         </button>
 
+        <div class="progress-wrap">
+
+            <div
+                class="progress-text"
+                id="progressText"
+            >
+                Шаг 1 из 7
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar"
+                ></div>
+
+            </div>
+
+        </div>
+
     </div>
 
 
-    <div
-        class="glass user-card"
-        id="userCard"
+    <!-- ЭКРАН 1 -->
+
+    <section
+        class="screen active"
+        data-screen="1"
     >
 
-        <div class="user-label">
-            Вы вошли как
+        <div class="card">
+
+            <div class="icon">
+                👤
+            </div>
+
+            <h1>
+                Контакт
+            </h1>
+
+            <p class="description">
+                Укажите ваши контактные данные.
+            </p>
+
+
+            <div class="field">
+
+                <label class="label">
+                    Имя
+                </label>
+
+                <input
+                    id="name"
+                    type="text"
+                    placeholder="Введите имя"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label class="label">
+                    Телефон
+                </label>
+
+                <input
+                    id="phone"
+                    type="tel"
+                    placeholder="Телефон будет получен через Telegram"
+                    readonly
+                >
+
+            </div>
+
+
+            <button
+                class="secondary-button"
+                id="contactButton"
+            >
+                📱 Поделиться номером через Telegram
+            </button>
+
+
+            <div
+                class="error"
+                id="error1"
+            >
+                Заполните имя перед продолжением.
+            </div>
+
+
+            <button
+                class="button"
+                onclick="nextScreen()"
+            >
+                Продолжить
+            </button>
+
         </div>
 
-        <div
-            class="user-name"
-            id="userName"
-        >
+    </section>
+
+
+    <!-- ЭКРАН 2 -->
+
+    <section
+        class="screen"
+        data-screen="2"
+    >
+
+        <div class="card">
+
+            <div class="icon">
+                📏
+            </div>
+
+            <h1>
+                Параметры
+            </h1>
+
+            <p class="description">
+                Укажите ваши основные параметры.
+            </p>
+
+
+            <div class="field">
+
+                <label class="label">
+                    Рост
+                </label>
+
+                <input
+                    id="height"
+                    type="number"
+                    placeholder="Например, 180 см"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label class="label">
+                    Вес
+                </label>
+
+                <input
+                    id="weight"
+                    type="number"
+                    placeholder="Например, 75 кг"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label class="label">
+                    Возраст
+                </label>
+
+                <input
+                    id="age"
+                    type="number"
+                    placeholder="Ваш возраст"
+                >
+
+            </div>
+
+
+            <button
+                class="button"
+                onclick="nextScreen()"
+            >
+                Продолжить
+            </button>
+
         </div>
 
-    </div>
+    </section>
 
 
-    <div class="glass section">
+    <!-- ЭКРАН 3 -->
 
-        <div class="section-title">
-            Всё готово 🚀
+    <section
+        class="screen"
+        data-screen="3"
+    >
+
+        <div class="card">
+
+            <div class="icon">
+                ✍️
+            </div>
+
+            <h1>
+                Дополнительная информация
+            </h1>
+
+            <p class="description">
+                Если хотите, расскажите о себе подробнее.
+            </p>
+
+
+            <textarea
+                id="additional"
+                placeholder="Дополнить от себя..."
+            ></textarea>
+
+
+            <button
+                class="button"
+                onclick="nextScreen()"
+            >
+                Продолжить
+            </button>
+
         </div>
 
-        <div class="section-text">
-            Это базовая версия нашего Telegram Mini App.
-            Дальше здесь появятся фотографии, видео,
-            информация, анкета и другие функции.
+    </section>
+
+
+    <!-- ЭКРАН 4 -->
+
+    <section
+        class="screen"
+        data-screen="4"
+    >
+
+        <div class="card">
+
+            <div class="icon">
+                🌍
+            </div>
+
+            <h1>
+                Укажите свое гражданство
+            </h1>
+
+            <p class="description">
+                Напишите страну вашего гражданства.
+            </p>
+
+
+            <textarea
+                id="citizenship"
+                placeholder="Например: Украина"
+            ></textarea>
+
+
+            <button
+                class="button"
+                onclick="nextScreen()"
+            >
+                Продолжить
+            </button>
+
         </div>
 
-    </div>
+    </section>
 
 
-    <div class="footer">
-        Telegram Mini App
-    </div>
+    <!-- ЭКРАН 5 -->
+
+    <section
+        class="screen"
+        data-screen="5"
+    >
+
+        <div class="card">
+
+            <div class="icon">
+                🎯
+            </div>
+
+            <h1>
+                Вас интересует?
+            </h1>
+
+            <p class="description">
+                Выберите один вариант.
+            </p>
+
+
+            <div class="options">
+
+                <div class="option">
+
+                    <input
+                        type="radio"
+                        name="interest"
+                        id="interest1"
+                        value="1 пункт"
+                    >
+
+                    <label for="interest1">
+                        1 пункт
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <input
+                        type="radio"
+                        name="interest"
+                        id="interest2"
+                        value="2 пункт"
+                    >
+
+                    <label for="interest2">
+                        2 пункт
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <input
+                        type="radio"
+                        name="interest"
+                        id="interest3"
+                        value="3 пункт"
+                    >
+
+                    <label for="interest3">
+                        3 пункт
+                    </label>
+
+                </div>
+
+
+                <div class="option">
+
+                    <input
+                        type="radio"
+                        name="interest"
+                        id="interest4"
+                        value="4 пункт"
+                    >
+
+                    <label for="interest4">
+                        4 пункт
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="button"
+                onclick="nextScreen()"
+            >
+                Продолжить
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ЭКРАН 6 -->
+
+    <section
+        class="screen"
+        data-screen="6"
+    >
+
+        <div class="card">
+
+            <div class="icon">
+                📎
+            </div>
+
+            <h1>
+                Прикрепить материалы
+            </h1>
+
+            <p class="description">
+                Добавьте фотографии или видео.
+                Можно выбрать несколько файлов.
+            </p>
+
+
+            <div class="upload-area">
+
+                <div class="upload-icon">
+                    📷
+                </div>
+
+                <div class="upload-title">
+                    Добавьте материалы
+                </div>
+
+                <div class="upload-description">
+                    Фото и видео будут отображаться здесь
+                </div>
+
+            </div>
+
+
+            <div class="file-buttons">
+
+                <button
+                    class="file-button"
+                    onclick="choosePhoto()"
+                >
+                    📷 Фото
+                </button>
+
+                <button
+                    class="file-button"
+                    onclick="chooseGallery()"
+                >
+                    🖼️ Галерея
+                </button>
+
+                <button
+                    class="file-button"
+                    onclick="chooseVideo()"
+                >
+                    🎥 Видео
+                </button>
+
+            </div>
+
+
+            <div
+                class="previews"
+                id="previews"
+            ></div>
+
+
+            <!-- Временный скрытый выбор файлов -->
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/*"
+                capture="environment"
+                multiple
+                style="display:none"
+            >
+
+            <input
+                type="file"
+                id="galleryInput"
+                accept="image/*"
+                multiple
+                style="display:none"
+            >
+
+            <input
+                type="file"
+                id="videoInput"
+                accept="video/*"
+                multiple
+                style="display:none"
+            >
+
+
+            <button
+                class="button"
+                onclick="nextScreen()"
+            >
+                Продолжить
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ЭКРАН 7 -->
+
+    <section
+        class="screen"
+        data-screen="7"
+    >
+
+        <div class="card">
+
+            <div class="icon">
+                ✅
+            </div>
+
+            <h1>
+                Подтверждение
+            </h1>
+
+            <p class="description">
+                Проверьте данные перед отправкой.
+            </p>
+
+
+            <div class="summary">
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Имя
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryName"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Телефон
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryPhone"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Параметры
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryParameters"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Дополнительная информация
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryAdditional"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Гражданство
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryCitizenship"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Вас интересует
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryInterest"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        Материалы
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="summaryFiles"
+                    >
+                        Файлы пока не загружены
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="button"
+                onclick="submitForm()"
+            >
+                ✅ Отправить анкету
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- УСПЕШНАЯ ОТПРАВКА -->
+
+    <section
+        class="screen"
+        data-screen="8"
+    >
+
+        <div class="card success">
+
+            <div class="success-icon">
+                🎉
+            </div>
+
+            <h1>
+                Спасибо!
+            </h1>
+
+            <p>
+                Анкета отправлена.
+            </p>
+
+        </div>
+
+    </section>
+
 
 </div>
 
 
 <script>
 
+    /* =========================
+       TELEGRAM
+    ========================= */
+
     const tg = window.Telegram.WebApp;
 
-    // Сообщаем Telegram, что приложение загружено
     tg.ready();
 
-    // Разворачиваем Mini App
     tg.expand();
 
-
-    // Получаем данные пользователя Telegram
-    const user = tg.initDataUnsafe?.user;
-
-
-    if (user) {
-
-        const userCard =
-            document.getElementById("userCard");
-
-        const userName =
-            document.getElementById("userName");
-
-        let name = user.first_name || "";
-
-        if (user.last_name) {
-            name += " " + user.last_name;
-        }
-
-        if (user.username) {
-            name += "  @" + user.username;
-        }
-
-        userName.textContent = name;
-
-        userCard.style.display = "block";
-    }
-
-
-    // Кнопка "Начать"
-    document
-        .getElementById("startButton")
-        .addEventListener("click", () => {
-
-            tg.HapticFeedback?.impactOccurred("light");
-
-            alert("Отлично! Начинаем 🚀");
-
-        });
-
-
-    // Настройка цвета интерфейса Telegram
     if (tg.setHeaderColor) {
         tg.setHeaderColor("#000000");
     }
 
     if (tg.setBackgroundColor) {
         tg.setBackgroundColor("#000000");
+    }
+
+
+    /* =========================
+       ПЕРЕМЕННЫЕ
+    ========================= */
+
+    let currentScreen = 1;
+
+    let files = [];
+
+
+    /* =========================
+       ПОЛЬЗОВАТЕЛЬ TELEGRAM
+    ========================= */
+
+    const telegramUser =
+        tg.initDataUnsafe?.user;
+
+
+    if (telegramUser) {
+
+        const nameInput =
+            document.getElementById("name");
+
+        if (!nameInput.value) {
+
+            let name =
+                telegramUser.first_name || "";
+
+            if (telegramUser.last_name) {
+
+                name +=
+                    " " +
+                    telegramUser.last_name;
+
+            }
+
+            nameInput.value = name;
+        }
+
+    }
+
+
+    /* =========================
+       ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
+    ========================= */
+
+    function showScreen(number) {
+
+        document
+            .querySelectorAll(".screen")
+            .forEach(screen => {
+
+                screen.classList.remove("active");
+
+            });
+
+
+        const screen =
+            document.querySelector(
+                `[data-screen="${number}"]`
+            );
+
+
+        if (screen) {
+
+            screen.classList.add("active");
+
+        }
+
+
+        currentScreen = number;
+
+
+        /* Progress */
+
+        if (number <= 7) {
+
+            const percent =
+                (number / 7) * 100;
+
+            document
+                .getElementById("progressBar")
+                .style.width =
+                percent + "%";
+
+
+            document
+                .getElementById("progressText")
+                .textContent =
+                `Шаг ${number} из 7`;
+
+        }
+
+
+        /* Back button */
+
+        const back =
+            document.getElementById(
+                "backButton"
+            );
+
+        if (number > 1 && number < 8) {
+
+            back.style.display =
+                "flex";
+
+        } else {
+
+            back.style.display =
+                "none";
+
+        }
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    /* =========================
+       НАЗАД
+    ========================= */
+
+    document
+        .getElementById("backButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                if (currentScreen > 1) {
+
+                    showScreen(
+                        currentScreen - 1
+                    );
+
+                }
+
+            }
+        );
+
+
+    /* =========================
+       ПРОДОЛЖИТЬ
+    ========================= */
+
+    function nextScreen() {
+
+        if (currentScreen === 1) {
+
+            const name =
+                document
+                    .getElementById("name")
+                    .value
+                    .trim();
+
+            if (!name) {
+
+                document
+                    .getElementById("error1")
+                    .style.display =
+                    "block";
+
+                return;
+
+            }
+
+        }
+
+
+        if (currentScreen === 5) {
+
+            const selected =
+                document.querySelector(
+                    'input[name="interest"]:checked'
+                );
+
+            if (!selected) {
+
+                alert(
+                    "Выберите один вариант."
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        if (currentScreen < 7) {
+
+            showScreen(
+                currentScreen + 1
+            );
+
+        }
+
+
+        if (currentScreen === 6) {
+
+            updateSummary();
+
+        }
+
+    }
+
+
+    /* =========================
+       ТЕЛЕФОН
+    ========================= */
+
+    document
+        .getElementById("contactButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "На следующем этапе здесь подключим получение номера телефона через Telegram."
+                );
+
+            }
+        );
+
+
+    /* =========================
+       ФАЙЛЫ
+    ========================= */
+
+    function choosePhoto() {
+
+        document
+            .getElementById("photoInput")
+            .click();
+
+    }
+
+
+    function chooseGallery() {
+
+        document
+            .getElementById("galleryInput")
+            .click();
+
+    }
+
+
+    function chooseVideo() {
+
+        document
+            .getElementById("videoInput")
+            .click();
+
+    }
+
+
+    document
+        .getElementById("photoInput")
+        .addEventListener(
+            "change",
+            handleFiles
+        );
+
+
+    document
+        .getElementById("galleryInput")
+        .addEventListener(
+            "change",
+            handleFiles
+        );
+
+
+    document
+        .getElementById("videoInput")
+        .addEventListener(
+            "change",
+            handleFiles
+        );
+
+
+    function handleFiles(event) {
+
+        const selected =
+            Array.from(
+                event.target.files
+            );
+
+
+        selected.forEach(file => {
+
+            files.push(file);
+
+        });
+
+
+        renderPreviews();
+
+        event.target.value = "";
+
+    }
+
+
+    function renderPreviews() {
+
+        const container =
+            document.getElementById(
+                "previews"
+            );
+
+
+        container.innerHTML = "";
+
+
+        files.forEach(
+            (file, index) => {
+
+                const preview =
+                    document.createElement(
+                        "div"
+                    );
+
+                preview.className =
+                    "preview";
+
+
+                if (
+                    file.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    const img =
+                        document.createElement(
+                            "img"
+                        );
+
+                    img.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+                    preview.appendChild(
+                        img
+                    );
+
+                } else {
+
+                    const video =
+                        document.createElement(
+                            "video"
+                        );
+
+                    video.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+                    video.muted = true;
+
+                    preview.appendChild(
+                        video
+                    );
+
+                }
+
+
+                preview.addEventListener(
+                    "click",
+                    () => {
+
+                        files.splice(
+                            index,
+                            1
+                        );
+
+                        renderPreviews();
+
+                    }
+                );
+
+
+                container.appendChild(
+                    preview
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       ПОДТВЕРЖДЕНИЕ
+    ========================= */
+
+    function updateSummary() {
+
+        document
+            .getElementById(
+                "summaryName"
+            )
+            .textContent =
+            document
+                .getElementById("name")
+                .value ||
+            "—";
+
+
+        document
+            .getElementById(
+                "summaryPhone"
+            )
+            .textContent =
+            document
+                .getElementById("phone")
+                .value ||
+            "Телефон ещё не получен";
+
+
+        const height =
+            document
+                .getElementById("height")
+                .value;
+
+        const weight =
+            document
+                .getElementById("weight")
+                .value;
+
+        const age =
+            document
+                .getElementById("age")
+                .value;
+
+
+        document
+            .getElementById(
+                "summaryParameters"
+            )
+            .textContent =
+            `${height || "—"} см / ${
+                weight || "—"
+            } кг / ${
+                age || "—"
+            } лет`;
+
+
+        document
+            .getElementById(
+                "summaryAdditional"
+            )
+            .textContent =
+            document
+                .getElementById(
+                    "additional"
+                )
+                .value ||
+            "—";
+
+
+        document
+            .getElementById(
+                "summaryCitizenship"
+            )
+            .textContent =
+            document
+                .getElementById(
+                    "citizenship"
+                )
+                .value ||
+            "—";
+
+
+        const selected =
+            document.querySelector(
+                'input[name="interest"]:checked'
+            );
+
+
+        document
+            .getElementById(
+                "summaryInterest"
+            )
+            .textContent =
+            selected
+                ? selected.value
+                : "—";
+
+
+        document
+            .getElementById(
+                "summaryFiles"
+            )
+            .textContent =
+            files.length
+                ? `${files.length} файл(ов) выбрано`
+                : "Файлы не добавлены";
+
+    }
+
+
+    /* =========================
+       ОТПРАВКА
+    ========================= */
+
+    function submitForm() {
+
+        updateSummary();
+
+        tg.HapticFeedback?.impactOccurred(
+            "medium"
+        );
+
+
+        /*
+           Пока только демонстрация.
+           На следующем этапе здесь
+           подключим отправку данных
+           в базу и менеджеру.
+        */
+
+        showScreen(8);
+
     }
 
 </script>
