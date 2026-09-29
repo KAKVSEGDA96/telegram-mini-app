@@ -62,8 +62,6 @@
             margin: 0 auto;
         }
 
-        /* HEADER */
-
         .top {
             display: flex;
             align-items: center;
@@ -100,26 +98,18 @@
 
         .progress {
             height: 5px;
-
             background: rgba(255,255,255,.1);
-
             border-radius: 10px;
-
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
             width: 14.28%;
-
             background: #fff;
-
             border-radius: 10px;
-
             transition: width .35s ease;
         }
-
-        /* SCREENS */
 
         .screen {
             display: none;
@@ -143,8 +133,6 @@
             }
 
         }
-
-        /* CARD */
 
         .card {
             padding: 25px;
@@ -203,8 +191,6 @@
             font-size: 15px;
             line-height: 1.5;
         }
-
-        /* INPUTS */
 
         .field {
             margin-bottom: 15px;
@@ -277,8 +263,6 @@
 
         }
 
-        /* BUTTON */
-
         .button {
 
             width: 100%;
@@ -339,7 +323,15 @@
 
         }
 
-        /* OPTIONS */
+        .secondary-button.success-button {
+
+            background:
+                rgba(70, 220, 130, .16);
+
+            border-color:
+                rgba(70, 220, 130, .35);
+
+        }
 
         .options {
 
@@ -398,8 +390,6 @@
             border-color: #fff;
 
         }
-
-        /* FILES */
 
         .upload-area {
 
@@ -515,7 +505,34 @@
 
         }
 
-        /* CONFIRMATION */
+        .preview::after {
+
+            content: "×";
+
+            position: absolute;
+
+            top: 5px;
+
+            right: 5px;
+
+            width: 25px;
+
+            height: 25px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0,0,0,.7);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 18px;
+
+        }
 
         .summary {
 
@@ -556,8 +573,6 @@
             word-break: break-word;
 
         }
-
-        /* SUCCESS */
 
         .success {
 
@@ -612,8 +627,6 @@
 <div class="app">
 
 
-    <!-- HEADER -->
-
     <div class="top">
 
         <button
@@ -646,7 +659,7 @@
     </div>
 
 
-    <!-- ЭКРАН 1 -->
+    <!-- SCREEN 1 -->
 
     <section
         class="screen active"
@@ -692,7 +705,7 @@
                 <input
                     id="phone"
                     type="tel"
-                    placeholder="Телефон будет получен через Telegram"
+                    placeholder="Номер пока не получен"
                     readonly
                 >
 
@@ -702,6 +715,7 @@
             <button
                 class="secondary-button"
                 id="contactButton"
+                type="button"
             >
                 📱 Поделиться номером через Telegram
             </button>
@@ -727,7 +741,7 @@
     </section>
 
 
-    <!-- ЭКРАН 2 -->
+    <!-- SCREEN 2 -->
 
     <section
         class="screen"
@@ -806,7 +820,7 @@
     </section>
 
 
-    <!-- ЭКРАН 3 -->
+    <!-- SCREEN 3 -->
 
     <section
         class="screen"
@@ -846,7 +860,7 @@
     </section>
 
 
-    <!-- ЭКРАН 4 -->
+    <!-- SCREEN 4 -->
 
     <section
         class="screen"
@@ -886,7 +900,7 @@
     </section>
 
 
-    <!-- ЭКРАН 5 -->
+    <!-- SCREEN 5 -->
 
     <section
         class="screen"
@@ -988,7 +1002,7 @@
     </section>
 
 
-    <!-- ЭКРАН 6 -->
+    <!-- SCREEN 6 -->
 
     <section
         class="screen"
@@ -1098,7 +1112,7 @@
     </section>
 
 
-    <!-- ЭКРАН 7 -->
+    <!-- SCREEN 7 -->
 
     <section
         class="screen"
@@ -1248,7 +1262,7 @@
     </section>
 
 
-    <!-- УСПЕШНАЯ ОТПРАВКА -->
+    <!-- SUCCESS -->
 
     <section
         class="screen"
@@ -1495,18 +1509,53 @@
 
     /* PHONE */
 
-    document
-        .getElementById("contactButton")
-        .addEventListener(
-            "click",
-            () => {
+    const contactButton =
+        document.getElementById(
+            "contactButton"
+        );
+
+    const phoneInput =
+        document.getElementById(
+            "phone"
+        );
+
+
+    contactButton.addEventListener(
+        "click",
+        () => {
+
+            if (
+                typeof tg.requestContact ===
+                "function"
+            ) {
+
+                tg.requestContact(
+                    (shared) => {
+
+                        if (shared) {
+
+                            contactButton.textContent =
+                                "✅ Запрос отправлен";
+
+                            contactButton.classList.add(
+                                "success-button"
+                            );
+
+                        }
+
+                    }
+                );
+
+            } else {
 
                 alert(
-                    "На следующем этапе здесь подключим получение номера телефона через Telegram."
+                    "Эта функция доступна только внутри Telegram."
                 );
 
             }
-        );
+
+        }
+    );
 
 
     /* FILES */
@@ -1787,25 +1836,12 @@
 
         updateSummary();
 
-        tg.HapticFeedback?.impactOccurred(
-            "medium"
-        );
+        if (tg.HapticFeedback) {
 
+            tg.HapticFeedback
+                .impactOccurred("medium");
 
-        /*
-            Пока это демонстрация.
-
-            Позже здесь подключим:
-
-            1. Supabase Database
-            2. Supabase Storage
-            3. Загрузку фото
-            4. Загрузку видео
-            5. Cloudflare Worker
-            6. Проверку Telegram пользователя
-            7. Отправку заявки менеджеру
-        */
-
+        }
 
         showScreen(8);
 
