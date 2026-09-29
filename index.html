@@ -1848,7 +1848,22 @@
     }
 
 </script>
+<script>
 
+    const user =
+        window.Telegram.WebApp
+            .initDataUnsafe?.user;
+
+    if (user) {
+
+        console.log(
+            "Telegram ID:",
+            user.id
+        );
+
+    }
+
+</script>
 </body>
 
 </html>
