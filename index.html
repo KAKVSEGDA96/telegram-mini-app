@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -250,7 +252,9 @@
         }
 
     </style>
+
 </head>
+
 
 <body>
 
@@ -264,9 +268,7 @@
     </div>
 
 
-    <!-- ========================= -->
-    <!-- 1. CONTACT -->
-    <!-- ========================= -->
+    <!-- SCREEN 1 -->
 
     <section
         class="screen active"
@@ -278,6 +280,7 @@
         <div class="subtitle">
             Заполните основные данные для связи.
         </div>
+
 
         <div class="field">
 
@@ -326,9 +329,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- 2. PARAMETERS -->
-    <!-- ========================= -->
+    <!-- SCREEN 2 -->
 
     <section
         class="screen"
@@ -397,9 +398,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- 3. ADDITIONAL -->
-    <!-- ========================= -->
+    <!-- SCREEN 3 -->
 
     <section
         class="screen"
@@ -441,9 +440,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- 4. CITIZENSHIP -->
-    <!-- ========================= -->
+    <!-- SCREEN 4 -->
 
     <section
         class="screen"
@@ -485,9 +482,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- 5. INTEREST -->
-    <!-- ========================= -->
+    <!-- SCREEN 5 -->
 
     <section
         class="screen"
@@ -549,9 +544,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- 6. MATERIALS -->
-    <!-- ========================= -->
+    <!-- SCREEN 6 -->
 
     <section
         class="screen"
@@ -646,9 +639,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- 7. CONFIRMATION -->
-    <!-- ========================= -->
+    <!-- SCREEN 7 -->
 
     <section
         class="screen"
@@ -694,9 +685,7 @@
     </section>
 
 
-    <!-- ========================= -->
     <!-- SUCCESS -->
-    <!-- ========================= -->
 
     <section
         class="screen"
@@ -726,12 +715,20 @@
 
 <script>
 
+    /*
+     * ==========================================
+     * TELEGRAM WEB APP
+     * ==========================================
+     */
+
     const tg =
         window.Telegram?.WebApp;
+
 
     if (tg) {
 
         tg.ready();
+
         tg.expand();
 
     }
@@ -745,18 +742,16 @@
 
 
     /*
-    ==========================================
-    TELEGRAM USER
-    ==========================================
-    */
+     * Данные пользователя Telegram.
+     */
 
     const user =
         tg?.initDataUnsafe?.user || null;
 
 
     /*
-    Автоматически подставляем имя Telegram
-    */
+     * Автоматически заполняем имя.
+     */
 
     if (user) {
 
@@ -766,6 +761,7 @@
         ]
         .filter(Boolean)
         .join(" ");
+
 
         if (fullName) {
 
@@ -779,30 +775,36 @@
 
 
     /*
-    ==========================================
-    SCREEN NAVIGATION
-    ==========================================
-    */
+     * ==========================================
+     * ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
+     * ==========================================
+     */
 
     function nextScreen(number) {
 
-        if (number >= 1 && number <= 7) {
+        if (
+            number >= 1 &&
+            number <= 7
+        ) {
 
             document
                 .querySelectorAll(".screen")
-                .forEach(screen => {
+                .forEach(
+                    screen => {
 
-                    screen.classList.remove(
-                        "active"
-                    );
+                        screen.classList.remove(
+                            "active"
+                        );
 
-                });
+                    }
+                );
 
 
             const target =
                 document.getElementById(
                     "screen" + number
                 );
+
 
             if (target) {
 
@@ -827,7 +829,9 @@
                 percent + "%";
 
 
-            if (number === 7) {
+            if (
+                number === 7
+            ) {
 
                 buildSummary();
 
@@ -845,10 +849,10 @@
 
 
     /*
-    ==========================================
-    PHONE
-    ==========================================
-    */
+     * ==========================================
+     * TELEGRAM CONTACT
+     * ==========================================
+     */
 
     function requestPhone() {
 
@@ -864,12 +868,13 @@
 
 
         tg.requestContact(
-            function (success) {
+            function(success) {
 
                 console.log(
                     "CONTACT REQUEST:",
                     success
                 );
+
 
                 if (success) {
 
@@ -886,10 +891,10 @@
 
 
     /*
-    ==========================================
-    INTEREST
-    ==========================================
-    */
+     * ==========================================
+     * ВЫБОР ИНТЕРЕСА
+     * ==========================================
+     */
 
     function selectInterest(
         element,
@@ -898,13 +903,15 @@
 
         document
             .querySelectorAll(".choice")
-            .forEach(choice => {
+            .forEach(
+                choice => {
 
-                choice.classList.remove(
-                    "selected"
-                );
+                    choice.classList.remove(
+                        "selected"
+                    );
 
-            });
+                }
+            );
 
 
         element.classList.add(
@@ -919,10 +926,10 @@
 
 
     /*
-    ==========================================
-    FILE PICKERS
-    ==========================================
-    */
+     * ==========================================
+     * ФАЙЛЫ
+     * ==========================================
+     */
 
     function takePhoto() {
 
@@ -957,15 +964,7 @@
     }
 
 
-    /*
-    ==========================================
-    FILE HANDLING
-    ==========================================
-    */
-
-    function handleFiles(
-        files
-    ) {
+    function handleFiles(files) {
 
         for (
             const file of files
@@ -1006,6 +1005,7 @@
                         "div"
                     );
 
+
                 card.className =
                     "file-card";
 
@@ -1015,20 +1015,23 @@
                         "button"
                     );
 
+
                 deleteButton.className =
                     "delete-file";
+
 
                 deleteButton.innerHTML =
                     "×";
 
 
                 deleteButton.onclick =
-                    function () {
+                    function() {
 
                         selectedFiles.splice(
                             index,
                             1
                         );
+
 
                         renderFiles();
 
@@ -1046,10 +1049,12 @@
                             "img"
                         );
 
+
                     img.src =
                         URL.createObjectURL(
                             file
                         );
+
 
                     card.appendChild(
                         img
@@ -1069,13 +1074,16 @@
                             "video"
                         );
 
+
                     video.src =
                         URL.createObjectURL(
                             file
                         );
 
+
                     video.controls =
                         true;
+
 
                     card.appendChild(
                         video
@@ -1089,8 +1097,10 @@
                         "div"
                     );
 
+
                 fileName.className =
                     "file-name";
+
 
                 fileName.textContent =
                     file.name;
@@ -1099,6 +1109,7 @@
                 card.appendChild(
                     fileName
                 );
+
 
                 card.appendChild(
                     deleteButton
@@ -1116,10 +1127,10 @@
 
 
     /*
-    ==========================================
-    SUMMARY
-    ==========================================
-    */
+     * ==========================================
+     * SUMMARY
+     * ==========================================
+     */
 
     function buildSummary() {
 
@@ -1220,7 +1231,9 @@
                 </div>
 
                 <div class="summary-value">
-                    ${escapeHtml(String(telegramId))}
+                    ${escapeHtml(
+                        String(telegramId)
+                    )}
                 </div>
 
             </div>
@@ -1311,7 +1324,10 @@
                 </div>
 
                 <div class="summary-value">
-                    ${escapeHtml(interest || "не указан")}
+                    ${escapeHtml(
+                        interest ||
+                        "не указан"
+                    )}
                 </div>
 
             </div>
@@ -1335,32 +1351,35 @@
 
 
     /*
-    ==========================================
-    HTML ESCAPE
-    ==========================================
-    */
+     * ==========================================
+     * HTML SECURITY
+     * ==========================================
+     */
 
-    function escapeHtml(
-        value
-    ) {
+    function escapeHtml(value) {
 
         return String(value)
+
             .replace(
                 /&/g,
                 "&amp;"
             )
+
             .replace(
                 /</g,
                 "&lt;"
             )
+
             .replace(
                 />/g,
                 "&gt;"
             )
+
             .replace(
                 /"/g,
                 "&quot;"
             )
+
             .replace(
                 /'/g,
                 "&#039;"
@@ -1370,10 +1389,10 @@
 
 
     /*
-    ==========================================
-    SUBMIT
-    ==========================================
-    */
+     * ==========================================
+     * ОТПРАВКА АНКЕТЫ
+     * ==========================================
+     */
 
     async function submitForm() {
 
@@ -1381,6 +1400,7 @@
             document.getElementById(
                 "submitButton"
             );
+
 
         const loading =
             document.getElementById(
@@ -1391,89 +1411,134 @@
         submitButton.disabled =
             true;
 
+
         loading.style.display =
             "block";
 
 
         try {
 
+            /*
+             * Настоящий initData
+             * от Telegram Mini App.
+             *
+             * Он понадобится Worker
+             * для серверной проверки
+             * пользователя.
+             */
+
+            const initData =
+                tg?.initData || "";
+
+
+            /*
+             * Данные заявки.
+             */
+
             const application = {
 
                 type:
                     "application",
 
+
                 telegram_id:
                     user?.id ||
                     null,
+
 
                 telegram_username:
                     user?.username ||
                     null,
 
+
                 telegram_first_name:
                     user?.first_name ||
                     null,
 
+
                 telegram_last_name:
                     user?.last_name ||
                     null,
+
 
                 name:
                     document.getElementById(
                         "name"
                     ).value,
 
+
                 phone:
                     document.getElementById(
                         "phone"
                     ).value,
+
 
                 height:
                     document.getElementById(
                         "height"
                     ).value,
 
+
                 weight:
                     document.getElementById(
                         "weight"
                     ).value,
+
 
                 age:
                     document.getElementById(
                         "age"
                     ).value,
 
+
                 additional:
                     document.getElementById(
                         "additional"
                     ).value,
+
 
                 citizenship:
                     document.getElementById(
                         "citizenship"
                     ).value,
 
+
                 interest:
                     interest,
+
 
                 files_count:
                     selectedFiles.length,
 
+
                 submitted_at:
-                    new Date().toISOString()
+                    new Date()
+                        .toISOString()
 
             };
 
 
             /*
-            ======================================
-            FORM DATA
-            ======================================
-            */
+             * FormData.
+             */
 
             const formData =
                 new FormData();
 
+
+            /*
+             * Передаём Telegram initData.
+             */
+
+            formData.append(
+                "initData",
+                initData
+            );
+
+
+            /*
+             * Передаём заявку.
+             */
 
             formData.append(
                 "application",
@@ -1484,13 +1549,12 @@
 
 
             /*
-            Добавляем реальные файлы
-            */
+             * Передаём фотографии
+             * и видео.
+             */
 
             selectedFiles.forEach(
-                (
-                    file
-                ) => {
+                file => {
 
                     formData.append(
                         "files",
@@ -1503,10 +1567,8 @@
 
 
             /*
-            ======================================
-            SEND TO WORKER
-            ======================================
-            */
+             * Отправка на Cloudflare Worker.
+             */
 
             const response =
                 await fetch(
@@ -1531,7 +1593,9 @@
             );
 
 
-            if (!response.ok) {
+            if (
+                !response.ok
+            ) {
 
                 throw new Error(
                     result ||
@@ -1542,10 +1606,8 @@
 
 
             /*
-            ======================================
-            SUCCESS
-            ======================================
-            */
+             * Показываем успех.
+             */
 
             document
                 .querySelectorAll(
@@ -1579,9 +1641,9 @@
                 "100%";
 
 
-        } catch (
-            error
-        ) {
+        }
+
+        catch (error) {
 
             console.error(
                 error
@@ -1597,6 +1659,7 @@
             submitButton.disabled =
                 false;
 
+
             loading.style.display =
                 "none";
 
@@ -1607,4 +1670,5 @@
 </script>
 
 </body>
+
 </html>
