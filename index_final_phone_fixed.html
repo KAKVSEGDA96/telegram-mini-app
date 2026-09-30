@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Анкета</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f2f2f7;
+            color: #111;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                Arial,
+                sans-serif;
+        }
+
+        .app {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        h1 {
+            margin: 10px 0 8px;
+            font-size: 30px;
+            line-height: 1.1;
+        }
+
+        h2 {
+            margin: 10px 0 8px;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            color: #777;
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #777;
+            margin: 0 0 7px 4px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 0;
+            outline: none;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 17px;
+            font-family: inherit;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            border: 0;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #007aff;
+            color: white;
+        }
+
+        button.secondary {
+            background: #e5e5ea;
+            color: #111;
+        }
+
+        button.contact {
+            background: #34c759;
+        }
+
+        button:disabled {
+            opacity: .5;
+        }
+
+        .progress {
+            height: 6px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #007aff;
+            width: 14%;
+            transition: .3s;
+        }
+
+        .choice {
+            background: white;
+            border-radius: 16px;
+            padding: 17px;
+            margin-bottom: 10px;
+            font-size: 17px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+            cursor: pointer;
+        }
+
+        .choice.selected {
+            background: #007aff;
+            color: white;
+        }
+
+        .upload-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .preview {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .file-card {
+            position: relative;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            min-height: 120px;
+        }
+
+        .file-card img,
+        .file-card video {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .file-name {
+            padding: 8px;
+            font-size: 12px;
+            word-break: break-word;
+        }
+
+        .delete-file {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            margin: 0;
+            border-radius: 50%;
+            background: rgba(0,0,0,.7);
+            color: white;
+            font-size: 18px;
+        }
+
+        .summary {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .summary-row {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-row:last-child {
+            border-bottom: 0;
+        }
+
+        .summary-title {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            word-break: break-word;
+        }
+
+        .success {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .hint {
+            color: #777;
+            font-size: 13px;
+            margin-top: 7px;
+            padding-left: 4px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <div class="progress">
+        <div
+            class="progress-bar"
+            id="progressBar"
+        ></div>
+    </div>
+
+
+    <!-- SCREEN 1 -->
+
+    <section
+        class="screen active"
+        id="screen1"
+    >
+
+        <h1>Контактные данные</h1>
+
+        <div class="subtitle">
+            Заполните основные данные для связи.
+        </div>
+
+
+        <div class="field">
+
+            <label>Имя</label>
+
+            <input
+                id="name"
+                type="text"
+                placeholder="Ваше имя"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Телефон</label>
+
+            <input
+                id="phone"
+                type="tel"
+                placeholder="+373..."
+            >
+
+            <div class="hint">
+                Можно указать номер вручную или поделиться контактом Telegram.
+            </div>
+
+        </div>
+
+
+        <button
+            class="contact"
+            onclick="requestPhone()"
+        >
+            📱 Поделиться номером Telegram
+        </button>
+
+
+        <button
+            onclick="nextScreen(2)"
+        >
+            Продолжить
+        </button>
+
+    </section>
+
+
+    <!-- SCREEN 2 -->
+
+    <section
+        class="screen"
+        id="screen2"
+    >
+
+        <h2>Параметры</h2>
+
+        <div class="subtitle">
+            Укажите ваши основные параметры.
+        </div>
+
+
+        <div class="field">
+
+            <label>Рост</label>
+
+            <input
+                id="height"
+                type="text"
+                placeholder="Например, 180 см"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Вес</label>
+
+            <input
+                id="weight"
+                type="text"
+                placeholder="Например, 50 кг"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Возраст</label>
+
+            <input
+                id="age"
+                type="number"
+                placeholder="Ваш возраст"
+            >
+
+        </div>
+
+
+        <button
+            class="secondary"
+            onclick="nextScreen(1)"
+        >
+            Назад
+        </button>
+
+        <button
+            onclick="nextScreen(3)"
+        >
+            Продолжить
+        </button>
+
+    </section>
+
+
+    <!-- SCREEN 3 -->
+
+    <section
+        class="screen"
+        id="screen3"
+    >
+
+        <h2>Дополнительная информация</h2>
+
+        <div class="subtitle">
+            Здесь можно написать всё, что считаете важным.
+        </div>
+
+
+        <div class="field">
+
+            <label>Дополнить от себя</label>
+
+            <textarea
+                id="additional"
+                placeholder="Напишите дополнительную информацию..."
+            ></textarea>
+
+        </div>
+
+
+        <button
+            class="secondary"
+            onclick="nextScreen(2)"
+        >
+            Назад
+        </button>
+
+        <button
+            onclick="nextScreen(4)"
+        >
+            Продолжить
+        </button>
+
+    </section>
+
+
+    <!-- SCREEN 4 -->
+
+    <section
+        class="screen"
+        id="screen4"
+    >
+
+        <h2>Гражданство</h2>
+
+        <div class="subtitle">
+            Укажите ваше гражданство.
+        </div>
+
+
+        <div class="field">
+
+            <label>Гражданство</label>
+
+            <textarea
+                id="citizenship"
+                placeholder="Например: Казахстан"
+            ></textarea>
+
+        </div>
+
+
+        <button
+            class="secondary"
+            onclick="nextScreen(3)"
+        >
+            Назад
+        </button>
+
+        <button
+            onclick="nextScreen(5)"
+        >
+            Продолжить
+        </button>
+
+    </section>
+
+
+    <!-- SCREEN 5 -->
+
+    <section
+        class="screen"
+        id="screen5"
+    >
+
+        <h2>Вас интересует?</h2>
+
+        <div class="subtitle">
+            Выберите один вариант.
+        </div>
+
+
+        <div
+            class="choice"
+            onclick="selectInterest(this, '1 пункт')"
+        >
+            1 пункт
+        </div>
+
+
+        <div
+            class="choice"
+            onclick="selectInterest(this, '2 пункт')"
+        >
+            2 пункт
+        </div>
+
+
+        <div
+            class="choice"
+            onclick="selectInterest(this, '3 пункт')"
+        >
+            3 пункт
+        </div>
+
+
+        <div
+            class="choice"
+            onclick="selectInterest(this, '4 пункт')"
+        >
+            4 пункт
+        </div>
+
+
+        <button
+            class="secondary"
+            onclick="nextScreen(4)"
+        >
+            Назад
+        </button>
+
+        <button
+            onclick="nextScreen(6)"
+        >
+            Продолжить
+        </button>
+
+    </section>
+
+
+    <!-- SCREEN 6 -->
+
+    <section
+        class="screen"
+        id="screen6"
+    >
+
+        <h2>Материалы</h2>
+
+        <div class="subtitle">
+            Прикрепите фотографии и видео.
+        </div>
+
+
+        <div
+            id="mediaHint"
+            class="hint"
+            style="color:#ff3b30; font-weight:600;"
+        >
+            ⚠️ Добавьте хотя бы одно фото или видео. Максимум — 10 файлов.
+        </div>
+
+
+        <div class="upload-buttons">
+
+            <button
+                type="button"
+                onclick="document.getElementById('photoInput').click()"
+            >
+                📷 Добавить фото
+            </button>
+
+
+            <button
+                type="button"
+                onclick="document.getElementById('videoInput').click()"
+            >
+                🎥 Добавить видео
+            </button>
+
+        </div>
+
+
+        <input
+            id="photoInput"
+            type="file"
+            accept="image/*"
+            multiple
+            style="display:none;"
+            onchange="handleFiles(this.files)"
+        >
+
+
+        <input
+            id="videoInput"
+            type="file"
+            accept="video/*"
+            multiple
+            style="display:none;"
+            onchange="handleFiles(this.files)"
+        >
+
+
+        <div
+            id="preview"
+            class="preview"
+        ></div>
+
+
+        <button
+            class="secondary"
+            onclick="nextScreen(5)"
+        >
+            Назад
+        </button>
+
+
+        <button
+            onclick="goToSummary()"
+        >
+            Продолжить
+        </button>
+
+    </section>
+
+
+    <!-- SCREEN 7 -->
+
+    <section
+        class="screen"
+        id="screen7"
+    >
+
+        <h2>Проверьте анкету</h2>
+
+        <div class="subtitle">
+            Перед отправкой убедитесь, что все данные указаны правильно.
+        </div>
+
+
+        <div
+            id="summary"
+            class="summary"
+        ></div>
+
+
+        <button
+            class="secondary"
+            onclick="nextScreen(6)"
+        >
+            Назад
+        </button>
+
+
+        <button
+            id="submitButton"
+            onclick="submitForm()"
+        >
+            Отправить анкету
+        </button>
+
+
+        <div
+            id="loading"
+            class="loading"
+        >
+            Отправляем анкету...
+        </div>
+
+    </section>
+
+
+    <!-- SUCCESS -->
+
+    <section
+        class="screen"
+        id="successScreen"
+    >
+
+        <div class="success">
+
+            <div class="success-icon">
+                ✅
+            </div>
+
+            <h2>
+                Анкета отправлена
+            </h2>
+
+            <div class="subtitle">
+                Спасибо! Ваша анкета успешно отправлена.
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    /*
+     * ==========================================
+     * TELEGRAM
+     * ==========================================
+     */
+
+    const tg =
+        window.Telegram?.WebApp;
+
+
+    if (tg) {
+
+        tg.ready();
+
+        tg.expand();
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПЕРЕМЕННЫЕ
+     * ==========================================
+     */
+
+    let currentScreen = 1;
+
+    let selectedFiles = [];
+
+    let interest = "";
+
+
+    const user =
+        tg?.initDataUnsafe?.user ||
+        null;
+
+
+    /*
+     * ==========================================
+     * ПРОГРЕСС
+     * ==========================================
+     */
+
+    function updateProgress() {
+
+        const progressBar =
+            document.getElementById(
+                "progressBar"
+            );
+
+
+        const percent =
+            Math.min(
+                currentScreen * 14,
+                100
+            );
+
+
+        progressBar.style.width =
+            percent + "%";
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
+     * ==========================================
+     */
+
+    function nextScreen(screenNumber) {
+
+        document
+            .querySelectorAll(
+                ".screen"
+            )
+            .forEach(
+                screen => {
+
+                    screen.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        const target =
+            document.getElementById(
+                "screen" +
+                screenNumber
+            );
+
+
+        if (target) {
+
+            target.classList.add(
+                "active"
+            );
+
+        }
+
+
+        currentScreen =
+            screenNumber;
+
+
+        updateProgress();
+
+
+        if (
+            screenNumber === 7
+        ) {
+
+            buildSummary();
+
+        }
+
+    }
+
+
+    /*
+     * ==========================================
+     * TELEGRAM PHONE
+     * ==========================================
+     */
+
+    /* =========================================================
+   PHONE AUTOFILL FROM WORKER / KV
+========================================================= */
+
+let phonePollingPromise = null;
+
+async function waitForPhone() {
+
+    if (phonePollingPromise) {
+        return phonePollingPromise;
+    }
+
+    phonePollingPromise = (async function() {
+
+        const phoneField =
+            document.getElementById("phone");
+
+        if (!phoneField) {
+            return;
+        }
+
+        const initData =
+            tg?.initData || "";
+
+        if (!initData) {
+            console.warn(
+                "Telegram initData отсутствует."
+            );
+            return;
+        }
+
+        for (
+            let attempt = 0;
+            attempt < 30;
+            attempt++
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev/phone",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    initData:
+                                        initData
+                                })
+                        }
+                    );
+
+                if (response.ok) {
+
+                    const data =
+                        await response.json();
+
+                    if (data.phone) {
+
+                        phoneField.value =
+                            data.phone;
+
+                        phoneField.classList.add(
+                            "phone-shared"
+                        );
+
+                        return data.phone;
+                    }
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "PHONE AUTOFILL ERROR:",
+                    error
+                );
+            }
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        1000
+                    )
+            );
+        }
+
+        console.warn(
+            "Телефон не найден в KV за 30 секунд."
+        );
+
+        return null;
+
+    })();
+
+    try {
+        return await phonePollingPromise;
+    } finally {
+        phonePollingPromise = null;
+    }
+}
+
+
+function requestPhone() {
+
+    if (!tg) {
+
+        alert(
+            "Telegram WebApp недоступен."
+        );
+
+        return;
+    }
+
+    /*
+     * Telegram отправляет контакт боту,
+     * а номер появляется на сервере через webhook.
+     * После разрешения начинаем опрашивать Worker /phone.
+     */
+
+    tg.requestContact(
+        async function(success) {
+
+            if (!success) {
+                return;
+            }
+
+            const phoneField =
+                document.getElementById("phone");
+
+            if (phoneField) {
+
+                phoneField.classList.add(
+                    "phone-shared"
+                );
+            }
+
+            await waitForPhone();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   TELEGRAM CONTACT EVENT
+========================================================= */
+
+if (tg && typeof tg.onEvent === "function") {
+
+    tg.onEvent(
+        "contactRequested",
+        function(event) {
+
+            if (
+                event &&
+                event.status === "sent"
+            ) {
+
+                waitForPhone();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+    /*
+     * ==========================================
+     * INTEREST
+     * ==========================================
+     */
+
+    /* =========================================================
+   AUTO RESTORE PHONE ON APP OPEN
+========================================================= */
+
+waitForPhone();
+
+
+function selectInterest(
+        element,
+        value
+    ) {
+
+        document
+            .querySelectorAll(
+                ".choice"
+            )
+            .forEach(
+                choice => {
+
+                    choice.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+        element.classList.add(
+            "selected"
+        );
+
+
+        interest =
+            value;
+
+    }
+
+
+    /*
+     * ==========================================
+     * FILES
+     * ==========================================
+     */
+
+    function handleFiles(
+        files
+    ) {
+
+        const incoming =
+            Array.from(files);
+
+
+        const availableSlots =
+            10 -
+            selectedFiles.length;
+
+
+        if (
+            availableSlots <= 0
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        const filesToAdd =
+            incoming.slice(
+                0,
+                availableSlots
+            );
+
+
+        selectedFiles =
+            selectedFiles.concat(
+                filesToAdd
+            );
+
+
+        if (
+            incoming.length >
+            availableSlots
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+        }
+
+
+        renderFiles();
+
+    }
+
+
+    /*
+     * ==========================================
+     * RENDER FILES
+     * ==========================================
+     */
+
+    function renderFiles() {
+
+        const preview =
+            document.getElementById(
+                "preview"
+            );
+
+
+        const mediaHint =
+            document.getElementById(
+                "mediaHint"
+            );
+
+
+        preview.innerHTML =
+            "";
+
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            mediaHint.style.display =
+                "block";
+
+        } else {
+
+            mediaHint.style.display =
+                "none";
+
+        }
+
+
+        selectedFiles.forEach(
+            (
+                file,
+                index
+            ) => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "file-card";
+
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                deleteButton.className =
+                    "delete-file";
+
+
+                deleteButton.type =
+                    "button";
+
+
+                deleteButton.innerHTML =
+                    "×";
+
+
+                deleteButton.onclick =
+                    function() {
+
+                        selectedFiles.splice(
+                            index,
+                            1
+                        );
+
+
+                        renderFiles();
+
+                    };
+
+
+                card.appendChild(
+                    deleteButton
+                );
+
+
+                if (
+                    file.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    image.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    card.appendChild(
+                        image
+                    );
+
+                }
+
+                else if (
+                    file.type.startsWith(
+                        "video/"
+                    )
+                ) {
+
+                    const video =
+                        document.createElement(
+                            "video"
+                        );
+
+
+                    video.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    video.controls =
+                        true;
+
+
+                    card.appendChild(
+                        video
+                    );
+
+                }
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "file-name";
+
+
+                name.textContent =
+                    file.name;
+
+
+                card.appendChild(
+                    name
+                );
+
+
+                preview.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПЕРЕХОД К SUMMARY
+     * ==========================================
+     */
+
+    function goToSummary() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        nextScreen(7);
+
+    }
+
+
+    /*
+     * ==========================================
+     * SUMMARY
+     * ==========================================
+     */
+
+    function buildSummary() {
+
+        const name =
+            document.getElementById(
+                "name"
+            ).value ||
+            "не указано";
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value ||
+            "не указан";
+
+
+        const height =
+            document.getElementById(
+                "height"
+            ).value ||
+            "не указано";
+
+
+        const weight =
+            document.getElementById(
+                "weight"
+            ).value ||
+            "не указано";
+
+
+        const age =
+            document.getElementById(
+                "age"
+            ).value ||
+            "не указано";
+
+
+        const additional =
+            document.getElementById(
+                "additional"
+            ).value ||
+            "не указано";
+
+
+        const citizenship =
+            document.getElementById(
+                "citizenship"
+            ).value ||
+            "не указано";
+
+
+        const username =
+            user?.username
+                ? "@" + user.username
+                : "не указан";
+
+
+        const telegramId =
+            user?.id ||
+            "не указан";
+
+
+        document.getElementById(
+            "summary"
+        ).innerHTML = `
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Имя
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(name)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Telegram username
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(username)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Telegram ID
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(
+                        String(telegramId)
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Телефон
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(phone)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Рост
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(height)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Вес
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(weight)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Возраст
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(age)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Дополнительно
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(additional)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Гражданство
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(citizenship)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Интерес
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(
+                        interest ||
+                        "не указан"
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Файлы
+                </div>
+
+                <div class="summary-value">
+                    ${selectedFiles.length}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+     * ==========================================
+     * HTML SECURITY
+     * ==========================================
+     */
+
+    function escapeHtml(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ОТПРАВКА АНКЕТЫ
+     * ==========================================
+     */
+
+    async function submitForm() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео перед отправкой анкеты."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
+
+
+        const loading =
+            document.getElementById(
+                "loading"
+            );
+
+
+        submitButton.disabled =
+            true;
+
+
+        loading.style.display =
+            "block";
+
+
+        try {
+
+            /*
+             * Настоящий initData
+             * от Telegram Mini App.
+             *
+             * Он понадобится Worker
+             * для серверной проверки
+             * пользователя.
+             */
+
+            const initData =
+                tg?.initData || "";
+
+
+            /*
+             * Данные заявки.
+             */
+
+            const application = {
+
+                type:
+                    "application",
+
+
+                telegram_id:
+                    user?.id ||
+                    null,
+
+
+                telegram_username:
+                    user?.username ||
+                    null,
+
+
+                telegram_first_name:
+                    user?.first_name ||
+                    null,
+
+
+                telegram_last_name:
+                    user?.last_name ||
+                    null,
+
+
+                name:
+                    document.getElementById(
+                        "name"
+                    ).value,
+
+
+                phone:
+                    document.getElementById(
+                        "phone"
+                    ).value,
+
+
+                height:
+                    document.getElementById(
+                        "height"
+                    ).value,
+
+
+                weight:
+                    document.getElementById(
+                        "weight"
+                    ).value,
+
+
+                age:
+                    document.getElementById(
+                        "age"
+                    ).value,
+
+
+                additional:
+                    document.getElementById(
+                        "additional"
+                    ).value,
+
+
+                citizenship:
+                    document.getElementById(
+                        "citizenship"
+                    ).value,
+
+
+                interest:
+                    interest,
+
+
+                files_count:
+                    selectedFiles.length,
+
+
+                submitted_at:
+                    new Date()
+                        .toISOString()
+
+            };
+
+
+            /*
+             * FormData.
+             */
+
+            const formData =
+                new FormData();
+
+
+            /*
+             * Передаём Telegram initData.
+             */
+
+            formData.append(
+                "initData",
+                initData
+            );
+
+
+            /*
+             * Передаём заявку.
+             */
+
+            formData.append(
+                "application",
+                JSON.stringify(
+                    application
+                )
+            );
+
+
+            /*
+             * Передаём фотографии
+             * и видео.
+             */
+
+            selectedFiles.forEach(
+                file => {
+
+                    formData.append(
+                        "files",
+                        file,
+                        file.name
+                    );
+
+                }
+            );
+
+
+            /*
+             * Отправка на Cloudflare Worker.
+             */
+
+            const response =
+                await fetch(
+                    "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev",
+                    {
+                        method:
+                            "POST",
+
+                        body:
+                            formData
+                    }
+                );
+
+
+            const result =
+                await response.text();
+
+
+            console.log(
+                "SERVER RESPONSE:",
+                result
+            );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    result ||
+                    "Ошибка отправки"
+                );
+
+            }
+
+
+            /*
+             * Показываем успех.
+             */
+
+            document
+                .querySelectorAll(
+                    ".screen"
+                )
+                .forEach(
+                    screen => {
+
+                        screen.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "successScreen"
+                )
+                .classList.add(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "progressBar"
+                )
+                .style.width =
+                "100%";
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Не удалось отправить анкету.\n\n" +
+                error.message
+            );
+
+
+            submitButton.disabled =
+                false;
+
+
+            loading.style.display =
+                "none";
+
+        }
+
+    }
+
+</script>
+
+</body>
+
+</html>
