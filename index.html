@@ -181,11 +181,6 @@ body::after {
 
 }
 
-
-/*
- * Именно ваш первый банер.
- */
-
 .welcome-banner img {
 
     width: 100%;
@@ -1299,15 +1294,11 @@ button:disabled {
 @media (max-width: 430px) {
 
     .welcome {
-
         padding-top: 4px;
-
     }
 
     .welcome-banner {
-
         border-radius: 22px;
-
     }
 
     .welcome-button {
@@ -1317,32 +1308,23 @@ button:disabled {
         font-size: 18px;
 
         border-radius: 22px;
-
     }
 
     .welcome-arrow {
-
         right: 18px;
-
     }
 
     h1 {
-
         font-size: 31px;
-
     }
 
     h2 {
-
         font-size: 27px;
-
     }
 
     .preview {
-
         grid-template-columns:
             repeat(2, 1fr);
-
     }
 
 }
@@ -1359,7 +1341,7 @@ button:disabled {
 
 
 <!-- =========================================================
-     WELCOME
+     WELCOME SCREEN
 ========================================================= -->
 
 <section
@@ -1370,23 +1352,18 @@ button:disabled {
     <div class="welcome-banner">
 
         <!--
-            ВАШ ПЕРВЫЙ БАНЕР
-
-            Файл:
-            welcome.jpg
-
-            Должен лежать рядом с index.html
+            ВАЖНО:
+            файл должен называться welcome.png
+            и лежать рядом с index.html
         -->
 
         <img
-            src="./welcome.jpg"
+            src="./welcome.png"
             alt="Добро пожаловать"
         >
 
     </div>
 
-
-    <!-- НАСТОЯЩАЯ КНОПКА -->
 
     <button
         class="welcome-button"
@@ -1985,6 +1962,7 @@ button:disabled {
 const tg =
     window.Telegram?.WebApp;
 
+
 if (tg) {
 
     tg.ready();
@@ -2023,7 +2001,7 @@ const user =
 
 
 /* =========================================================
-   START APPLICATION
+   START
 ========================================================= */
 
 function startApplication() {
@@ -2071,6 +2049,7 @@ function updateProgress() {
             "progressBar"
         );
 
+
     if (!bar) return;
 
 
@@ -2111,8 +2090,7 @@ function nextScreen(number) {
 
     const target =
         document.getElementById(
-            "screen" +
-            number
+            "screen" + number
         );
 
 
@@ -2138,261 +2116,6 @@ function nextScreen(number) {
         buildSummary();
 
     }
-
-}
-
-
-/* =========================================================
-   SLEEP
-========================================================= */
-
-function sleep(ms) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                ms
-            )
-    );
-
-}
-
-
-/* =========================================================
-   PHONE
-========================================================= */
-
-async function requestPhone() {
-
-    if (!tg) {
-
-        alert(
-            "Откройте приложение внутри Telegram."
-        );
-
-        return;
-
-    }
-
-
-    if (phoneLoading) return;
-
-
-    const button =
-        document.getElementById(
-            "contactButton"
-        );
-
-
-    const hint =
-        document.getElementById(
-            "phoneHint"
-        );
-
-
-    phoneLoading = true;
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Получаем номер…";
-
-
-    hint.textContent =
-        "Подтвердите передачу номера в Telegram…";
-
-
-    try {
-
-        tg.requestContact(
-            async function(success) {
-
-                if (!success) {
-
-                    phoneLoading =
-                        false;
-
-                    button.disabled =
-                        false;
-
-                    button.textContent =
-                        "📱 Поделиться номером Telegram";
-
-                    hint.textContent =
-                        "Можно указать номер вручную или поделиться контактом Telegram.";
-
-                    return;
-
-                }
-
-
-                hint.textContent =
-                    "Сохраняем номер…";
-
-
-                const phone =
-                    await waitForPhone();
-
-
-                if (phone) {
-
-                    document
-                        .getElementById(
-                            "phone"
-                        )
-                        .value =
-                        phone;
-
-
-                    button.textContent =
-                        "✓ Номер получен";
-
-
-                    button.classList.add(
-                        "success-contact"
-                    );
-
-
-                    hint.textContent =
-                        "Номер автоматически добавлен из Telegram.";
-
-                }
-
-                else {
-
-                    button.disabled =
-                        false;
-
-                    button.textContent =
-                        "📱 Повторить получение номера";
-
-                    hint.textContent =
-                        "Не удалось получить номер автоматически. Попробуйте ещё раз.";
-
-                }
-
-
-                phoneLoading =
-                    false;
-
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        phoneLoading =
-            false;
-
-
-        button.disabled =
-            false;
-
-
-        button.textContent =
-            "📱 Повторить получение номера";
-
-
-        hint.textContent =
-            "Произошла ошибка при получении номера.";
-
-    }
-
-}
-
-
-/* =========================================================
-   GET PHONE FROM WORKER
-========================================================= */
-
-async function waitForPhone() {
-
-    const initData =
-        tg?.initData ||
-        "";
-
-
-    if (!initData) {
-
-        return null;
-
-    }
-
-
-    for (
-        let attempt = 0;
-        attempt < 15;
-        attempt++
-    ) {
-
-        try {
-
-            const response =
-                await fetch(
-                    WORKER_URL +
-                    "/phone",
-                    {
-                        method:
-                            "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-                                initData:
-                                    initData
-                            })
-                    }
-                );
-
-
-            if (
-                response.ok
-            ) {
-
-                const result =
-                    await response.json();
-
-
-                if (
-                    result.ok &&
-                    result.phone
-                ) {
-
-                    return result.phone;
-
-                }
-
-            }
-
-        }
-
-        catch (error) {
-
-            console.error(
-                error
-            );
-
-        }
-
-
-        await sleep(700);
-
-    }
-
-
-    return null;
 
 }
 
@@ -2428,6 +2151,127 @@ function selectInterest(
 
     interest =
         value;
+
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+function requestPhone() {
+
+    if (!tg) {
+
+        alert(
+            "Откройте приложение внутри Telegram."
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "contactButton"
+        );
+
+
+    const hint =
+        document.getElementById(
+            "phoneHint"
+        );
+
+
+    if (phoneLoading) {
+        return;
+    }
+
+
+    phoneLoading = true;
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Запрашиваем номер…";
+
+
+    hint.textContent =
+        "Подтвердите передачу номера в Telegram.";
+
+
+    try {
+
+        tg.requestContact(
+            function(success) {
+
+                phoneLoading =
+                    false;
+
+
+                button.disabled =
+                    false;
+
+
+                if (success) {
+
+                    button.textContent =
+                        "✓ Номер отправлен";
+
+
+                    button.classList.add(
+                        "success-contact"
+                    );
+
+
+                    hint.textContent =
+                        "Номер сохранён. При отправке анкеты он будет добавлен автоматически.";
+
+                }
+
+                else {
+
+                    button.textContent =
+                        "📱 Поделиться номером Telegram";
+
+
+                    hint.textContent =
+                        "Можно указать номер вручную или поделиться контактом Telegram.";
+
+                }
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        phoneLoading =
+            false;
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "📱 Поделиться номером Telegram";
+
+
+        hint.textContent =
+            "Не удалось запросить номер. Попробуйте ещё раз.";
+
+    }
 
 }
 
@@ -2534,7 +2378,7 @@ function formatFileSize(bytes) {
 
 
 /* =========================================================
-   FILE RENDER
+   FILE PREVIEW
 ========================================================= */
 
 function renderFiles() {
@@ -2584,6 +2428,7 @@ function renderFiles() {
 
     photoButton.disabled =
         limit;
+
 
     videoButton.disabled =
         limit;
@@ -2782,13 +2627,26 @@ function goToSummary() {
     }
 
 
+    if (
+        selectedFiles.length > 10
+    ) {
+
+        alert(
+            "Можно загрузить максимум 10 файлов."
+        );
+
+        return;
+
+    }
+
+
     nextScreen(7);
 
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+   ESCAPE
 ========================================================= */
 
 function escapeHtml(value) {
@@ -2829,63 +2687,59 @@ function escapeHtml(value) {
 
 function buildSummary() {
 
-    const values = {
+    const name =
+        document.getElementById(
+            "name"
+        ).value ||
+        "не указано";
 
-        name:
-            document.getElementById(
-                "name"
-            ).value ||
-            "не указано",
 
-        phone:
-            document.getElementById(
-                "phone"
-            ).value ||
-            "не указан",
+    const phone =
+        document.getElementById(
+            "phone"
+        ).value ||
+        "будет добавлен автоматически";
 
-        height:
-            document.getElementById(
-                "height"
-            ).value ||
-            "не указано",
 
-        weight:
-            document.getElementById(
-                "weight"
-            ).value ||
-            "не указано",
+    const height =
+        document.getElementById(
+            "height"
+        ).value ||
+        "не указано";
 
-        age:
-            document.getElementById(
-                "age"
-            ).value ||
-            "не указано",
 
-        additional:
-            document.getElementById(
-                "additional"
-            ).value ||
-            "не указано",
+    const weight =
+        document.getElementById(
+            "weight"
+        ).value ||
+        "не указано";
 
-        citizenship:
-            document.getElementById(
-                "citizenship"
-            ).value ||
-            "не указано"
 
-    };
+    const age =
+        document.getElementById(
+            "age"
+        ).value ||
+        "не указано";
+
+
+    const additional =
+        document.getElementById(
+            "additional"
+        ).value ||
+        "не указано";
+
+
+    const citizenship =
+        document.getElementById(
+            "citizenship"
+        ).value ||
+        "не указано";
 
 
     const username =
         user?.username
-            ? "@" +
-              user.username
+            ? "@" + user.username
             : "не указан";
-
-
-    const telegramId =
-        user?.id ||
-        "не указан";
 
 
     document.getElementById(
@@ -2893,17 +2747,20 @@ function buildSummary() {
     ).innerHTML = `
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Имя
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.name)}
+                ${escapeHtml(name)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Telegram
             </div>
@@ -2911,65 +2768,77 @@ function buildSummary() {
             <div class="summary-value">
                 ${escapeHtml(username)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Телефон
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.phone)}
+                ${escapeHtml(phone)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Рост
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.height)}
+                ${escapeHtml(height)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Вес
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.weight)}
+                ${escapeHtml(weight)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Возраст
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.age)}
+                ${escapeHtml(age)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Гражданство
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.citizenship)}
+                ${escapeHtml(citizenship)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Интерес
             </div>
@@ -2980,21 +2849,25 @@ function buildSummary() {
                     "не указан"
                 )}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Дополнительно
             </div>
 
             <div class="summary-value">
-                ${escapeHtml(values.additional)}
+                ${escapeHtml(additional)}
             </div>
+
         </div>
 
 
         <div class="summary-row">
+
             <div class="summary-title">
                 Материалы
             </div>
@@ -3002,6 +2875,7 @@ function buildSummary() {
             <div class="summary-value">
                 📎 ${selectedFiles.length} файлов
             </div>
+
         </div>
 
     `;
@@ -3026,6 +2900,19 @@ async function submitForm() {
 
         alert(
             "Добавьте хотя бы одно фото или видео."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        selectedFiles.length > 10
+    ) {
+
+        alert(
+            "Можно загрузить максимум 10 файлов."
         );
 
         return;
@@ -3066,6 +2953,15 @@ async function submitForm() {
         const initData =
             tg?.initData ||
             "";
+
+
+        if (!initData) {
+
+            throw new Error(
+                "Приложение должно быть открыто внутри Telegram."
+            );
+
+        }
 
 
         const application = {
