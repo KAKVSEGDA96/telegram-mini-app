@@ -1864,6 +1864,90 @@
     }
 
 </script>
+<script>
+
+async function sendApplicationTest() {
+
+    const user =
+        window.Telegram.WebApp
+            .initDataUnsafe?.user;
+
+    const data = {
+
+        type: "application",
+
+        telegram_id:
+            user?.id || null,
+
+        name:
+            document.getElementById("name").value,
+
+        phone:
+            document.getElementById("phone").value,
+
+        height:
+            document.getElementById("height").value,
+
+        weight:
+            document.getElementById("weight").value,
+
+        age:
+            document.getElementById("age").value,
+
+        additional:
+            document.getElementById("additional").value,
+
+        citizenship:
+            document.getElementById("citizenship").value,
+
+        interest:
+            document.querySelector(
+                'input[name="interest"]:checked'
+            )?.value || null
+
+    };
+
+
+    try {
+
+        const response =
+            await fetch(
+                "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(data)
+                }
+            );
+
+
+        if (response.ok) {
+
+            console.log(
+                "Анкета отправлена в Worker",
+                data
+            );
+
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Ошибка отправки:",
+            error
+        );
+
+    }
+
+}
+
+</script>
 </body>
 
 </html>
