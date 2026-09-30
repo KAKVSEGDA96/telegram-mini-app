@@ -558,42 +558,33 @@
         </div>
 
 
-        <div class="upload-buttons">
-
-            <button
-                onclick="takePhoto()"
-            >
-                📷 Сделать фото
-            </button>
-
-
-            <button
-                class="secondary"
-                onclick="selectPhotos()"
-            >
-                🖼️ Выбрать фотографии
-            </button>
-
-
-            <button
-                class="secondary"
-                onclick="selectVideos()"
-            >
-                🎥 Выбрать видео
-            </button>
-
+        <div
+            id="mediaHint"
+            class="hint"
+            style="color:#ff3b30; font-weight:600;"
+        >
+            ⚠️ Добавьте хотя бы одно фото или видео. Максимум — 10 файлов.
         </div>
 
 
-        <input
-            id="photoCamera"
-            type="file"
-            accept="image/*"
-            capture="environment"
-            multiple
-            hidden
-            onchange="handleFiles(this.files)"
-        >
+        <div class="upload-buttons">
+
+            <button
+                type="button"
+                onclick="document.getElementById('photoInput').click()"
+            >
+                📷 Добавить фото
+            </button>
+
+
+            <button
+                type="button"
+                onclick="document.getElementById('videoInput').click()"
+            >
+                🎥 Добавить видео
+            </button>
+
+        </div>
 
 
         <input
@@ -601,7 +592,7 @@
             type="file"
             accept="image/*"
             multiple
-            hidden
+            style="display:none;"
             onchange="handleFiles(this.files)"
         >
 
@@ -611,14 +602,14 @@
             type="file"
             accept="video/*"
             multiple
-            hidden
+            style="display:none;"
             onchange="handleFiles(this.files)"
         >
 
 
         <div
-            class="preview"
             id="preview"
+            class="preview"
         ></div>
 
 
@@ -631,7 +622,7 @@
 
 
         <button
-            onclick="nextScreen(7)"
+            onclick="goToSummary()"
         >
             Продолжить
         </button>
@@ -649,13 +640,13 @@
         <h2>Проверьте анкету</h2>
 
         <div class="subtitle">
-            Перед отправкой убедитесь, что данные указаны правильно.
+            Перед отправкой убедитесь, что все данные указаны правильно.
         </div>
 
 
         <div
-            class="summary"
             id="summary"
+            class="summary"
         ></div>
 
 
@@ -671,13 +662,13 @@
             id="submitButton"
             onclick="submitForm()"
         >
-            ✅ Отправить анкету
+            Отправить анкету
         </button>
 
 
         <div
-            class="loading"
             id="loading"
+            class="loading"
         >
             Отправляем анкету...
         </div>
@@ -699,11 +690,11 @@
             </div>
 
             <h2>
-                Спасибо!
+                Анкета отправлена
             </h2>
 
             <div class="subtitle">
-                Анкета успешно отправлена.
+                Спасибо! Ваша анкета успешно отправлена.
             </div>
 
         </div>
@@ -717,7 +708,7 @@
 
     /*
      * ==========================================
-     * TELEGRAM WEB APP
+     * TELEGRAM
      * ==========================================
      */
 
@@ -734,42 +725,47 @@
     }
 
 
-    let currentScreen = 1;
+    /*
+     * ==========================================
+     * ПЕРЕМЕННЫЕ
+     * ==========================================
+     */
 
-    let interest = "";
+    let currentScreen = 1;
 
     let selectedFiles = [];
 
+    let interest = "";
 
-    /*
-     * Данные пользователя Telegram.
-     */
 
     const user =
-        tg?.initDataUnsafe?.user || null;
+        tg?.initDataUnsafe?.user ||
+        null;
 
 
     /*
-     * Автоматически заполняем имя.
+     * ==========================================
+     * ПРОГРЕСС
+     * ==========================================
      */
 
-    if (user) {
+    function updateProgress() {
 
-        const fullName = [
-            user.first_name,
-            user.last_name
-        ]
-        .filter(Boolean)
-        .join(" ");
-
-
-        if (fullName) {
-
+        const progressBar =
             document.getElementById(
-                "name"
-            ).value = fullName;
+                "progressBar"
+            );
 
-        }
+
+        const percent =
+            Math.min(
+                currentScreen * 14,
+                100
+            );
+
+
+        progressBar.style.width =
+            percent + "%";
 
     }
 
@@ -780,68 +776,51 @@
      * ==========================================
      */
 
-    function nextScreen(number) {
+    function nextScreen(screenNumber) {
+
+        document
+            .querySelectorAll(
+                ".screen"
+            )
+            .forEach(
+                screen => {
+
+                    screen.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        const target =
+            document.getElementById(
+                "screen" +
+                screenNumber
+            );
+
+
+        if (target) {
+
+            target.classList.add(
+                "active"
+            );
+
+        }
+
+
+        currentScreen =
+            screenNumber;
+
+
+        updateProgress();
+
 
         if (
-            number >= 1 &&
-            number <= 7
+            screenNumber === 7
         ) {
 
-            document
-                .querySelectorAll(".screen")
-                .forEach(
-                    screen => {
-
-                        screen.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-
-            const target =
-                document.getElementById(
-                    "screen" + number
-                );
-
-
-            if (target) {
-
-                target.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            currentScreen =
-                number;
-
-
-            const percent =
-                (number / 7) * 100;
-
-
-            document.getElementById(
-                "progressBar"
-            ).style.width =
-                percent + "%";
-
-
-            if (
-                number === 7
-            ) {
-
-                buildSummary();
-
-            }
-
-
-            window.scrollTo(
-                0,
-                0
-            );
+            buildSummary();
 
         }
 
@@ -850,7 +829,7 @@
 
     /*
      * ==========================================
-     * TELEGRAM CONTACT
+     * TELEGRAM PHONE
      * ==========================================
      */
 
@@ -859,7 +838,7 @@
         if (!tg) {
 
             alert(
-                "Откройте приложение через Telegram."
+                "Telegram WebApp недоступен."
             );
 
             return;
@@ -870,19 +849,23 @@
         tg.requestContact(
             function(success) {
 
-                console.log(
-                    "CONTACT REQUEST:",
-                    success
-                );
+                if (!success) {
 
-
-                if (success) {
-
-                    alert(
-                        "Номер отправлен боту Telegram."
-                    );
+                    return;
 
                 }
+
+
+                /*
+                 * Сам номер Telegram
+                 * будет дополнительно
+                 * сохранён Worker
+                 * через webhook.
+                 */
+
+                alert(
+                    "Номер телефона сохранён."
+                );
 
             }
         );
@@ -892,7 +875,7 @@
 
     /*
      * ==========================================
-     * ВЫБОР ИНТЕРЕСА
+     * INTEREST
      * ==========================================
      */
 
@@ -902,7 +885,9 @@
     ) {
 
         document
-            .querySelectorAll(".choice")
+            .querySelectorAll(
+                ".choice"
+            )
             .forEach(
                 choice => {
 
@@ -927,51 +912,56 @@
 
     /*
      * ==========================================
-     * ФАЙЛЫ
+     * FILES
      * ==========================================
      */
 
-    function takePhoto() {
+    function handleFiles(
+        files
+    ) {
 
-        document
-            .getElementById(
-                "photoCamera"
-            )
-            .click();
-
-    }
+        const incoming =
+            Array.from(files);
 
 
-    function selectPhotos() {
-
-        document
-            .getElementById(
-                "photoInput"
-            )
-            .click();
-
-    }
+        const availableSlots =
+            10 -
+            selectedFiles.length;
 
 
-    function selectVideos() {
-
-        document
-            .getElementById(
-                "videoInput"
-            )
-            .click();
-
-    }
-
-
-    function handleFiles(files) {
-
-        for (
-            const file of files
+        if (
+            availableSlots <= 0
         ) {
 
-            selectedFiles.push(
-                file
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        const filesToAdd =
+            incoming.slice(
+                0,
+                availableSlots
+            );
+
+
+        selectedFiles =
+            selectedFiles.concat(
+                filesToAdd
+            );
+
+
+        if (
+            incoming.length >
+            availableSlots
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
             );
 
         }
@@ -982,6 +972,12 @@
     }
 
 
+    /*
+     * ==========================================
+     * RENDER FILES
+     * ==========================================
+     */
+
     function renderFiles() {
 
         const preview =
@@ -990,8 +986,29 @@
             );
 
 
+        const mediaHint =
+            document.getElementById(
+                "mediaHint"
+            );
+
+
         preview.innerHTML =
             "";
+
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            mediaHint.style.display =
+                "block";
+
+        } else {
+
+            mediaHint.style.display =
+                "none";
+
+        }
 
 
         selectedFiles.forEach(
@@ -1020,6 +1037,10 @@
                     "delete-file";
 
 
+                deleteButton.type =
+                    "button";
+
+
                 deleteButton.innerHTML =
                     "×";
 
@@ -1038,30 +1059,34 @@
                     };
 
 
+                card.appendChild(
+                    deleteButton
+                );
+
+
                 if (
                     file.type.startsWith(
                         "image/"
                     )
                 ) {
 
-                    const img =
+                    const image =
                         document.createElement(
                             "img"
                         );
 
 
-                    img.src =
+                    image.src =
                         URL.createObjectURL(
                             file
                         );
 
 
                     card.appendChild(
-                        img
+                        image
                     );
 
                 }
-
 
                 else if (
                     file.type.startsWith(
@@ -1092,27 +1117,22 @@
                 }
 
 
-                const fileName =
+                const name =
                     document.createElement(
                         "div"
                     );
 
 
-                fileName.className =
+                name.className =
                     "file-name";
 
 
-                fileName.textContent =
+                name.textContent =
                     file.name;
 
 
                 card.appendChild(
-                    fileName
-                );
-
-
-                card.appendChild(
-                    deleteButton
+                    name
                 );
 
 
@@ -1122,6 +1142,45 @@
 
             }
         );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПЕРЕХОД К SUMMARY
+     * ==========================================
+     */
+
+    function goToSummary() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        nextScreen(7);
 
     }
 
@@ -1138,7 +1197,7 @@
             document.getElementById(
                 "name"
             ).value ||
-            "не указан";
+            "не указано";
 
 
         const phone =
@@ -1152,21 +1211,21 @@
             document.getElementById(
                 "height"
             ).value ||
-            "не указан";
+            "не указано";
 
 
         const weight =
             document.getElementById(
                 "weight"
             ).value ||
-            "не указан";
+            "не указано";
 
 
         const age =
             document.getElementById(
                 "age"
             ).value ||
-            "не указан";
+            "не указано";
 
 
         const additional =
@@ -1395,6 +1454,36 @@
      */
 
     async function submitForm() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео перед отправкой анкеты."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
 
         const submitButton =
             document.getElementById(
