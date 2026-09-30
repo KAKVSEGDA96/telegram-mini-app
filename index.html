@@ -7,7 +7,7 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
     <title>Анкета</title>
@@ -18,18 +18,13 @@
 
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        html,
         body {
             margin: 0;
             padding: 0;
-            width: 100%;
-            min-height: 100%;
-        }
-
-        body {
+            background: #f2f2f7;
+            color: #111;
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -37,983 +32,223 @@
                 "SF Pro Text",
                 Arial,
                 sans-serif;
-
-            background:
-                radial-gradient(
-                    circle at 80% 0%,
-                    rgba(255, 126, 0, .18),
-                    transparent 28%
-                ),
-                radial-gradient(
-                    circle at 0% 100%,
-                    rgba(255, 100, 0, .07),
-                    transparent 30%
-                ),
-                #08090b;
-
-            color: #f5f5f7;
-
-            overflow-x: hidden;
         }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: -3;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    transparent 0%,
-                    rgba(255,255,255,.018) 30%,
-                    transparent 48%
-                ),
-                linear-gradient(
-                    145deg,
-                    transparent 55%,
-                    rgba(255,115,0,.025) 65%,
-                    transparent 78%
-                );
-
-            opacity: .9;
-        }
-
-        /* =========================================================
-           APP
-        ========================================================= */
 
         .app {
-            width: 100%;
-            max-width: 680px;
+            max-width: 600px;
             margin: 0 auto;
-
-            padding:
-                max(18px, env(safe-area-inset-top))
-                14px
-                max(24px, env(safe-area-inset-bottom));
-
-            position: relative;
+            padding: 20px 16px 40px;
         }
-
-        .app::before {
-            content: "";
-            position: fixed;
-
-            width: 300px;
-            height: 300px;
-
-            right: -160px;
-            top: 5%;
-
-            border-radius: 50%;
-
-            background:
-                rgba(255, 120, 0, .13);
-
-            filter: blur(90px);
-
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .app::after {
-            content: "";
-            position: fixed;
-
-            width: 240px;
-            height: 240px;
-
-            left: -150px;
-            bottom: 5%;
-
-            border-radius: 50%;
-
-            background:
-                rgba(255, 150, 60, .055);
-
-            filter: blur(85px);
-
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* =========================================================
-           PROGRESS
-        ========================================================= */
-
-        .progress {
-            width: calc(100% - 28px);
-            height: 7px;
-
-            margin:
-                4px auto
-                18px;
-
-            border-radius: 999px;
-
-            overflow: hidden;
-
-            background:
-                rgba(255,255,255,.075);
-
-            border:
-                1px solid
-                rgba(255,255,255,.045);
-
-            box-shadow:
-                inset 0 1px 2px rgba(0,0,0,.35),
-                0 0 20px rgba(255,128,0,.04);
-        }
-
-        .progress-bar {
-            width: 14%;
-            height: 100%;
-
-            border-radius: inherit;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ff6f00 0%,
-                    #ff8b21 55%,
-                    #ffb15e 100%
-                );
-
-            box-shadow:
-                0 0 12px rgba(255,115,0,.55),
-                0 0 28px rgba(255,115,0,.20);
-
-            transition:
-                width .35s ease;
-        }
-
-        /* =========================================================
-           SCREENS
-        ========================================================= */
 
         .screen {
             display: none;
-
-            position: relative;
-
-            padding:
-                28px 24px
-                25px;
-
-            margin:
-                0 2px
-                20px;
-
-            border-radius: 28px;
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.095),
-                    rgba(255,255,255,.045) 42%,
-                    rgba(255,255,255,.025)
-                );
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.10),
-
-                inset 0 -1px 0
-                rgba(0,0,0,.28),
-
-                0 22px 70px
-                rgba(0,0,0,.38),
-
-                0 0 0 1px
-                rgba(255,128,0,.025);
-
-            backdrop-filter:
-                blur(30px)
-                saturate(125%);
-
-            -webkit-backdrop-filter:
-                blur(30px)
-                saturate(125%);
-
-            overflow: hidden;
         }
 
         .screen.active {
             display: block;
         }
 
-        .screen::before {
-            content: "";
-
-            position: absolute;
-            inset: 0;
-
-            pointer-events: none;
-
-            border-radius: inherit;
-
-            background:
-                linear-gradient(
-                    125deg,
-                    rgba(255,255,255,.08),
-                    transparent 22%,
-                    transparent 68%,
-                    rgba(255,128,0,.035)
-                );
-        }
-
-        .screen::after {
-            content: "";
-
-            position: absolute;
-
-            width: 190px;
-            height: 190px;
-
-            right: -115px;
-            top: -100px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(255,128,0,.10);
-
-            filter: blur(48px);
-
-            pointer-events: none;
-        }
-
-        .screen > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* =========================================================
-           TYPOGRAPHY
-        ========================================================= */
-
         h1 {
-            margin:
-                0 0 10px;
-
-            font-size: 34px;
-            line-height: 1.05;
-
-            font-weight: 750;
-
-            letter-spacing:
-                -.045em;
+            margin: 10px 0 8px;
+            font-size: 30px;
+            line-height: 1.1;
         }
 
         h2 {
-            margin:
-                0 0 10px;
-
-            font-size: 30px;
-            line-height: 1.06;
-
-            font-weight: 750;
-
-            letter-spacing:
-                -.045em;
+            margin: 10px 0 8px;
+            font-size: 26px;
         }
 
         .subtitle {
-            color:
-                rgba(235,235,245,.57);
-
+            color: #777;
             font-size: 16px;
-            line-height: 1.45;
-
-            margin-bottom: 28px;
+            margin-bottom: 25px;
+            line-height: 1.4;
         }
 
-        /* =========================================================
-           FIELDS
-        ========================================================= */
-
         .field {
-            margin-bottom: 19px;
+            margin-bottom: 16px;
         }
 
         label {
             display: block;
-
-            color:
-                rgba(235,235,245,.62);
-
             font-size: 14px;
-
-            margin:
-                0 0 8px 4px;
+            color: #777;
+            margin: 0 0 7px 4px;
         }
 
         input,
         textarea {
             width: 100%;
-
-            color: #f5f5f7;
-
-            font-family: inherit;
-            font-size: 17px;
-
-            border:
-                1px solid
-                rgba(255,255,255,.105);
-
-            border-radius: 20px;
-
+            border: 0;
             outline: none;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.095),
-                    rgba(255,255,255,.040)
-                );
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.075),
-
-                0 10px 32px
-                rgba(0,0,0,.20);
-
-            transition:
-                border-color .2s ease,
-                box-shadow .2s ease,
-                background .2s ease;
-        }
-
-        input {
-            height: 58px;
-            padding:
-                0 17px 0 55px;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 17px;
+            font-family: inherit;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
         }
 
         textarea {
-            min-height: 125px;
-
-            padding:
-                16px 17px;
-
+            min-height: 150px;
             resize: vertical;
         }
 
-        input::placeholder,
-        textarea::placeholder {
-            color:
-                rgba(235,235,245,.38);
-        }
-
-        input:focus,
-        textarea:focus {
-            border-color:
-                rgba(255,145,45,.45);
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.08),
-
-                0 0 0 3px
-                rgba(255,128,0,.055),
-
-                0 12px 35px
-                rgba(255,128,0,.10);
-        }
-
-        /* =========================================================
-           FIELD ICONS
-        ========================================================= */
-
-        input#name {
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23aeb0b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c.7-4.1 3.5-6 8-6s7.3 1.9 8 6'/%3E%3C/svg%3E");
-
-            background-repeat:
-                no-repeat;
-
-            background-position:
-                18px center;
-
-            background-size:
-                22px;
-        }
-
-        input#phone {
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23aeb0b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 2.9a2 2 0 0 1-.5 2.1L9.1 11a16 16 0 0 0 3.9 3.9l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.9.7 2.9.8A2 2 0 0 1 22 16.9z'/%3E%3C/svg%3E");
-
-            background-repeat:
-                no-repeat;
-
-            background-position:
-                18px center;
-
-            background-size:
-                22px;
-        }
-
-        input#height {
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23aeb0b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 21 21 3'/%3E%3Cpath d='m6 18 3 3M9 15l2 2M12 12l2 2M15 9l2 2M18 6l3 3'/%3E%3C/svg%3E");
-
-            background-repeat:
-                no-repeat;
-
-            background-position:
-                18px center;
-
-            background-size:
-                22px;
-        }
-
-        input#weight {
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23aeb0b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8h12l1.5 12h-15z'/%3E%3Cpath d='M9 8a3 3 0 0 1 6 0'/%3E%3Cpath d='M9 13h6'/%3E%3C/svg%3E");
-
-            background-repeat:
-                no-repeat;
-
-            background-position:
-                18px center;
-
-            background-size:
-                22px;
-        }
-
-        input#age {
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23aeb0b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='3'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
-
-            background-repeat:
-                no-repeat;
-
-            background-position:
-                18px center;
-
-            background-size:
-                22px;
-        }
-
-        input.phone-shared {
-            border-color:
-                rgba(255,145,45,.42);
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.08),
-
-                0 0 0 3px
-                rgba(255,128,0,.055),
-
-                0 12px 35px
-                rgba(255,128,0,.10);
-        }
-
-        /* =========================================================
-           HINT
-        ========================================================= */
-
-        .hint {
-            margin-top: 9px;
-            padding-left: 4px;
-
-            color:
-                rgba(235,235,245,.52);
-
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        /* =========================================================
-           BUTTONS
-        ========================================================= */
-
         button {
             width: 100%;
-
-            min-height: 54px;
-
+            border: 0;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 600;
             margin-top: 10px;
-
-            padding:
-                16px 18px;
-
-            border-radius: 20px;
-
-            border:
-                1px solid
-                rgba(255,128,0,.28);
-
-            color: #fff;
-
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 650;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,128,0,.22),
-                    rgba(255,255,255,.055)
-                );
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.10),
-
-                0 9px 32px
-                rgba(0,0,0,.25),
-
-                0 0 25px
-                rgba(255,128,0,.055);
-
             cursor: pointer;
-
-            transition:
-                transform .15s ease,
-                filter .15s ease,
-                opacity .15s ease;
-        }
-
-        button:active {
-            transform:
-                scale(.985);
-        }
-
-        button:disabled {
-            opacity: .45;
-            cursor: default;
-        }
-
-        button.contact {
-            min-height: 60px;
-
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,128,0,.31),
-                    rgba(255,128,0,.075)
-                );
-
-            border-color:
-                rgba(255,145,45,.46);
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.14),
-
-                0 8px 34px
-                rgba(255,128,0,.16),
-
-                0 0 28px
-                rgba(255,128,0,.12);
+            background: #007aff;
+            color: white;
         }
 
         button.secondary {
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,.095),
-                    rgba(255,255,255,.035)
-                );
-
-            border-color:
-                rgba(255,255,255,.10);
-
-            color:
-                rgba(245,245,247,.84);
+            background: #e5e5ea;
+            color: #111;
         }
 
-        /* =========================================================
-           CHOICES
-        ========================================================= */
+        button.contact {
+            background: #34c759;
+        }
 
-        .choices {
-            display: grid;
+        button:disabled {
+            opacity: .5;
+        }
 
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+        .progress {
+            height: 6px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
 
-            gap: 10px;
-
-            margin-top: 8px;
+        .progress-bar {
+            height: 100%;
+            background: #007aff;
+            width: 14%;
+            transition: .3s;
         }
 
         .choice {
-            min-height: 55px;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            padding:
-                14px 12px;
-
-            border-radius: 18px;
-
-            border:
-                1px solid
-                rgba(255,255,255,.085);
-
-            color:
-                rgba(245,245,247,.84);
-
-            text-align: center;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,.08),
-                    rgba(255,255,255,.035)
-                );
-
+            background: white;
+            border-radius: 16px;
+            padding: 17px;
+            margin-bottom: 10px;
+            font-size: 17px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
             cursor: pointer;
-
-            transition:
-                all .18s ease;
         }
 
         .choice.selected {
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,128,0,.30),
-                    rgba(255,128,0,.075)
-                );
-
-            border-color:
-                rgba(255,145,45,.46);
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.10),
-
-                0 8px 28px
-                rgba(255,128,0,.13);
+            background: #007aff;
+            color: white;
         }
-
-        /* =========================================================
-           UPLOAD
-        ========================================================= */
 
         .upload-buttons {
             display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 12px;
-        }
-
-        .upload-buttons button {
-            min-height: 58px;
-
-            margin-top: 0;
-
-            border-radius: 18px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,.10),
-                    rgba(255,255,255,.035)
-                );
-
-            border-color:
-                rgba(255,255,255,.11);
-        }
-
-        .media-counter {
-            margin-top: 12px;
-
-            padding:
-                12px 14px;
-
-            border-radius: 17px;
-
-            text-align: center;
-
-            color:
-                rgba(235,235,245,.60);
-
-            font-size: 14px;
-            font-weight: 600;
-
-            background:
-                rgba(255,255,255,.055);
-
-            border:
-                1px solid
-                rgba(255,255,255,.075);
-        }
-
-        .media-counter.limit {
-            color:
-                #ff9b42;
-
-            border-color:
-                rgba(255,145,45,.28);
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
 
         .preview {
+            margin-top: 20px;
             display: grid;
-
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
-
-            gap: 12px;
-
-            margin-top: 14px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
 
         .file-card {
             position: relative;
-
-            min-width: 0;
-
-            min-height: 95px;
-
-            padding: 6px;
-
-            border-radius: 19px;
-
+            background: white;
+            border-radius: 14px;
             overflow: hidden;
-
-            background:
-                rgba(255,255,255,.055);
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
+            min-height: 120px;
         }
 
         .file-card img,
         .file-card video {
-            display: block;
-
             width: 100%;
-            height: 88px;
-
+            height: 150px;
             object-fit: cover;
-
-            border-radius: 14px;
+            display: block;
         }
 
         .file-name {
-            overflow: hidden;
-
-            margin-top: 5px;
-
-            color:
-                rgba(235,235,245,.55);
-
-            font-size: 10px;
-
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            padding: 8px;
+            font-size: 12px;
+            word-break: break-word;
         }
 
         .delete-file {
             position: absolute;
-
-            top: 8px;
-            right: 8px;
-
-            z-index: 3;
-
-            width: 28px;
-            min-height: 28px;
-
-            margin: 0;
+            top: 7px;
+            right: 7px;
+            width: 32px;
+            height: 32px;
             padding: 0;
-
+            margin: 0;
             border-radius: 50%;
-
-            background:
-                rgba(0,0,0,.65);
-
-            border:
-                1px solid
-                rgba(255,255,255,.18);
-
+            background: rgba(0,0,0,.7);
+            color: white;
             font-size: 18px;
-
-            line-height: 28px;
         }
 
-        /* =========================================================
-           SUMMARY
-        ========================================================= */
-
-        #summary {
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 8px;
-
-            margin-bottom: 14px;
+        .summary {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 18px;
         }
 
         .summary-row {
-            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
 
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 14px;
-
-            padding:
-                13px 15px;
-
-            border-radius: 17px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,.075),
-                    rgba(255,255,255,.032)
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.065);
+        .summary-row:last-child {
+            border-bottom: 0;
         }
 
         .summary-title {
-            color:
-                rgba(235,235,245,.53);
-
-            font-size: 12px;
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 3px;
         }
 
         .summary-value {
-            max-width: 62%;
-
-            color:
-                rgba(245,245,247,.90);
-
-            font-size: 13px;
-
-            text-align: right;
-
-            overflow-wrap: anywhere;
+            font-size: 16px;
+            word-break: break-word;
         }
-
-        /* =========================================================
-           LOADING
-        ========================================================= */
-
-        .loading {
-            display: none;
-
-            margin-top: 12px;
-
-            padding: 15px;
-
-            border-radius: 17px;
-
-            text-align: center;
-
-            color:
-                rgba(235,235,245,.62);
-
-            background:
-                rgba(255,255,255,.055);
-
-            border:
-                1px solid
-                rgba(255,255,255,.075);
-        }
-
-        /* =========================================================
-           SUCCESS
-        ========================================================= */
 
         .success {
-            min-height: 52vh;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-            justify-content: center;
-
             text-align: center;
+            padding: 60px 20px;
         }
 
         .success-icon {
-            width: 100px;
-            height: 100px;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            margin-bottom: 24px;
-
-            border-radius: 30px;
-
-            font-size: 48px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,128,0,.30),
-                    rgba(255,255,255,.05)
-                );
-
-            border:
-                1px solid
-                rgba(255,145,45,.35);
-
-            box-shadow:
-                inset 0 1px 0
-                rgba(255,255,255,.11),
-
-                0 16px 50px
-                rgba(255,128,0,.16);
+            font-size: 60px;
+            margin-bottom: 20px;
         }
 
-        /* =========================================================
-           MOBILE
-        ========================================================= */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
 
-        @media (max-width: 430px) {
-
-            .screen {
-                padding:
-                    24px 18px 21px;
-
-                border-radius: 25px;
-            }
-
-            h1 {
-                font-size: 31px;
-            }
-
-            h2 {
-                font-size: 27px;
-            }
-
-            .progress {
-                margin-left: 16px;
-                margin-right: 16px;
-            }
-
+        .hint {
+            color: #777;
+            font-size: 13px;
+            margin-top: 7px;
+            padding-left: 4px;
         }
 
     </style>
@@ -1026,27 +261,21 @@
 <div class="app">
 
     <div class="progress">
-
         <div
             class="progress-bar"
             id="progressBar"
         ></div>
-
     </div>
 
 
-    <!-- =========================================================
-         SCREEN 1 — CONTACT
-    ========================================================= -->
+    <!-- SCREEN 1 -->
 
     <section
         class="screen active"
         id="screen1"
     >
 
-        <h1>
-            Контактные данные
-        </h1>
+        <h1>Контактные данные</h1>
 
         <div class="subtitle">
             Заполните основные данные для связи.
@@ -1055,9 +284,7 @@
 
         <div class="field">
 
-            <label>
-                Имя
-            </label>
+            <label>Имя</label>
 
             <input
                 id="name"
@@ -1070,9 +297,7 @@
 
         <div class="field">
 
-            <label>
-                Телефон
-            </label>
+            <label>Телефон</label>
 
             <input
                 id="phone"
@@ -1091,31 +316,27 @@
             class="contact"
             onclick="requestPhone()"
         >
-            📱 &nbsp; Поделиться номером Telegram
+            📱 Поделиться номером Telegram
         </button>
 
 
         <button
             onclick="nextScreen(2)"
         >
-            Продолжить&nbsp;&nbsp;›
+            Продолжить
         </button>
 
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 2 — PARAMETERS
-    ========================================================= -->
+    <!-- SCREEN 2 -->
 
     <section
         class="screen"
         id="screen2"
     >
 
-        <h2>
-            Параметры
-        </h2>
+        <h2>Параметры</h2>
 
         <div class="subtitle">
             Укажите ваши основные параметры.
@@ -1124,9 +345,7 @@
 
         <div class="field">
 
-            <label>
-                Рост
-            </label>
+            <label>Рост</label>
 
             <input
                 id="height"
@@ -1139,9 +358,7 @@
 
         <div class="field">
 
-            <label>
-                Вес
-            </label>
+            <label>Вес</label>
 
             <input
                 id="weight"
@@ -1154,9 +371,7 @@
 
         <div class="field">
 
-            <label>
-                Возраст
-            </label>
+            <label>Возраст</label>
 
             <input
                 id="age"
@@ -1171,30 +386,26 @@
             class="secondary"
             onclick="nextScreen(1)"
         >
-            ‹&nbsp;&nbsp; Назад
+            Назад
         </button>
 
         <button
             onclick="nextScreen(3)"
         >
-            Продолжить&nbsp;&nbsp;›
+            Продолжить
         </button>
 
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 3 — ADDITIONAL
-    ========================================================= -->
+    <!-- SCREEN 3 -->
 
     <section
         class="screen"
         id="screen3"
     >
 
-        <h2>
-            Дополнительная информация
-        </h2>
+        <h2>Дополнительная информация</h2>
 
         <div class="subtitle">
             Здесь можно написать всё, что считаете важным.
@@ -1202,6 +413,8 @@
 
 
         <div class="field">
+
+            <label>Дополнить от себя</label>
 
             <textarea
                 id="additional"
@@ -1215,47 +428,40 @@
             class="secondary"
             onclick="nextScreen(2)"
         >
-            ‹&nbsp;&nbsp; Назад
+            Назад
         </button>
 
         <button
             onclick="nextScreen(4)"
         >
-            Продолжить&nbsp;&nbsp;›
+            Продолжить
         </button>
 
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 4 — CITIZENSHIP
-    ========================================================= -->
+    <!-- SCREEN 4 -->
 
     <section
         class="screen"
         id="screen4"
     >
 
-        <h2>
-            Введите ваше гражданство
-        </h2>
+        <h2>Гражданство</h2>
 
         <div class="subtitle">
-            Выберите или укажите ваше гражданство.
+            Укажите ваше гражданство.
         </div>
 
 
         <div class="field">
 
-            <label>
-                Гражданство
-            </label>
+            <label>Гражданство</label>
 
-            <input
+            <textarea
                 id="citizenship"
-                type="text"
-                placeholder="Например, Молдова"
-            >
+                placeholder="Например: Казахстан"
+            ></textarea>
 
         </div>
 
@@ -1264,66 +470,61 @@
             class="secondary"
             onclick="nextScreen(3)"
         >
-            ‹&nbsp;&nbsp; Назад
+            Назад
         </button>
 
         <button
             onclick="nextScreen(5)"
         >
-            Продолжить&nbsp;&nbsp;›
+            Продолжить
         </button>
 
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 5 — INTEREST
-    ========================================================= -->
+    <!-- SCREEN 5 -->
 
     <section
         class="screen"
         id="screen5"
     >
 
-        <h2>
-            Вас интересует?
-        </h2>
+        <h2>Вас интересует?</h2>
 
         <div class="subtitle">
             Выберите один вариант.
         </div>
 
 
-        <div class="choices">
+        <div
+            class="choice"
+            onclick="selectInterest(this, '1 пункт')"
+        >
+            1 пункт
+        </div>
 
-            <div
-                class="choice"
-                onclick="selectInterest(this, '1 пункт')"
-            >
-                👑&nbsp; 1 пункт
-            </div>
 
-            <div
-                class="choice"
-                onclick="selectInterest(this, '2 пункт')"
-            >
-                🔥&nbsp; 2 пункт
-            </div>
+        <div
+            class="choice"
+            onclick="selectInterest(this, '2 пункт')"
+        >
+            2 пункт
+        </div>
 
-            <div
-                class="choice"
-                onclick="selectInterest(this, '3 пункт')"
-            >
-                ☆&nbsp; 3 пункт
-            </div>
 
-            <div
-                class="choice"
-                onclick="selectInterest(this, '4 пункт')"
-            >
-                ♥&nbsp; 4 пункт
-            </div>
+        <div
+            class="choice"
+            onclick="selectInterest(this, '3 пункт')"
+        >
+            3 пункт
+        </div>
 
+
+        <div
+            class="choice"
+            onclick="selectInterest(this, '4 пункт')"
+        >
+            4 пункт
         </div>
 
 
@@ -1331,30 +532,26 @@
             class="secondary"
             onclick="nextScreen(4)"
         >
-            ‹&nbsp;&nbsp; Назад
+            Назад
         </button>
 
         <button
             onclick="nextScreen(6)"
         >
-            Продолжить&nbsp;&nbsp;›
+            Продолжить
         </button>
 
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 6 — MATERIALS
-    ========================================================= -->
+    <!-- SCREEN 6 -->
 
     <section
         class="screen"
         id="screen6"
     >
 
-        <h2>
-            Материалы
-        </h2>
+        <h2>Материалы</h2>
 
         <div class="subtitle">
             Прикрепите фотографии и видео.
@@ -1364,28 +561,27 @@
         <div
             id="mediaHint"
             class="hint"
+            style="color:#ff3b30; font-weight:600;"
         >
-            ⚠️ Добавьте хотя бы одно фото или видео.
-            Максимум — 10 файлов.
+            ⚠️ Добавьте хотя бы одно фото или видео. Максимум — 10 файлов.
         </div>
 
 
         <div class="upload-buttons">
 
             <button
-                id="photoButton"
                 type="button"
-                onclick="selectPhotos()"
+                onclick="document.getElementById('photoInput').click()"
             >
-                🖼️ &nbsp; Добавить фото
+                📷 Добавить фото
             </button>
 
+
             <button
-                id="videoButton"
                 type="button"
-                onclick="selectVideos()"
+                onclick="document.getElementById('videoInput').click()"
             >
-                🎥 &nbsp; Добавить видео
+                🎥 Добавить видео
             </button>
 
         </div>
@@ -1396,7 +592,7 @@
             type="file"
             accept="image/*"
             multiple
-            hidden
+            style="display:none;"
             onchange="handleFiles(this.files)"
         >
 
@@ -1406,32 +602,14 @@
             type="file"
             accept="video/*"
             multiple
-            hidden
-            onchange="handleFiles(this.files)"
-        >
-
-
-        <input
-            id="photoCamera"
-            type="file"
-            accept="image/*"
-            capture="environment"
-            hidden
+            style="display:none;"
             onchange="handleFiles(this.files)"
         >
 
 
         <div
-            class="media-counter"
-            id="mediaCounter"
-        >
-            0 / 10 файлов
-        </div>
-
-
-        <div
-            class="preview"
             id="preview"
+            class="preview"
         ></div>
 
 
@@ -1439,44 +617,44 @@
             class="secondary"
             onclick="nextScreen(5)"
         >
-            ‹&nbsp;&nbsp; Назад
+            Назад
         </button>
+
 
         <button
             onclick="goToSummary()"
         >
-            Продолжить&nbsp;&nbsp;›
+            Продолжить
         </button>
 
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 7 — SUMMARY
-    ========================================================= -->
+    <!-- SCREEN 7 -->
 
     <section
         class="screen"
         id="screen7"
     >
 
-        <h2>
-            Проверьте анкету
-        </h2>
+        <h2>Проверьте анкету</h2>
 
         <div class="subtitle">
             Перед отправкой убедитесь, что все данные указаны правильно.
         </div>
 
 
-        <div id="summary"></div>
+        <div
+            id="summary"
+            class="summary"
+        ></div>
 
 
         <button
             class="secondary"
             onclick="nextScreen(6)"
         >
-            ‹&nbsp;&nbsp; Назад
+            Назад
         </button>
 
 
@@ -1484,7 +662,7 @@
             id="submitButton"
             onclick="submitForm()"
         >
-            ✈️&nbsp; Отправить анкету
+            Отправить анкету
         </button>
 
 
@@ -1498,9 +676,7 @@
     </section>
 
 
-    <!-- =========================================================
-         SUCCESS
-    ========================================================= -->
+    <!-- SUCCESS -->
 
     <section
         class="screen"
@@ -1510,7 +686,7 @@
         <div class="success">
 
             <div class="success-icon">
-                ✓
+                ✅
             </div>
 
             <h2>
@@ -1530,1173 +706,77 @@
 
 <script>
 
-/* =========================================================
-   TELEGRAM
-========================================================= */
+    /*
+     * ==========================================
+     * TELEGRAM
+     * ==========================================
+     */
 
-const tg =
-    window.Telegram?.WebApp;
-
-
-if (tg) {
-
-    tg.ready();
-
-    tg.expand();
-
-}
+    const tg =
+        window.Telegram?.WebApp;
 
 
-/* =========================================================
-   VARIABLES
-========================================================= */
+    if (tg) {
 
-let currentScreen = 1;
+        tg.ready();
 
-let selectedFiles = [];
-
-let interest = "";
-
-
-const user =
-    tg?.initDataUnsafe?.user ||
-    null;
-
-
-/* =========================================================
-   TELEGRAM NAME
-========================================================= */
-
-if (user) {
-
-    const telegramName = [
-
-        user.first_name,
-
-        user.last_name
-
-    ]
-    .filter(Boolean)
-    .join(" ");
-
-
-    const nameField =
-        document.getElementById(
-            "name"
-        );
-
-
-    if (
-        nameField &&
-        !nameField.value &&
-        telegramName
-    ) {
-
-        nameField.value =
-            telegramName;
-
-    }
-
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-function updateProgress() {
-
-    const progressBar =
-        document.getElementById(
-            "progressBar"
-        );
-
-
-    const percent =
-        Math.min(
-            currentScreen * 14,
-            100
-        );
-
-
-    progressBar.style.width =
-        percent + "%";
-
-}
-
-
-/* =========================================================
-   SCREEN SWITCH
-========================================================= */
-
-function nextScreen(
-    screenNumber
-) {
-
-    document
-        .querySelectorAll(
-            ".screen"
-        )
-        .forEach(
-            screen => {
-
-                screen.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    const target =
-        document.getElementById(
-            "screen" +
-            screenNumber
-        );
-
-
-    if (target) {
-
-        target.classList.add(
-            "active"
-        );
+        tg.expand();
 
     }
 
 
-    currentScreen =
-        screenNumber;
+    /*
+     * ==========================================
+     * ПЕРЕМЕННЫЕ
+     * ==========================================
+     */
 
+    let currentScreen = 1;
 
-    updateProgress();
+    let selectedFiles = [];
 
+    let interest = "";
 
-    if (
-        screenNumber === 7
-    ) {
 
-        buildSummary();
+    const user =
+        tg?.initDataUnsafe?.user ||
+        null;
 
-    }
 
+    /*
+     * ==========================================
+     * ПРОГРЕСС
+     * ==========================================
+     */
 
-    window.scrollTo(
-        0,
-        0
-    );
+    function updateProgress() {
 
-}
-
-
-/* =========================================================
-   TELEGRAM PHONE
-========================================================= */
-
-function requestPhone() {
-
-    if (!tg) {
-
-        alert(
-            "Telegram WebApp недоступен."
-        );
-
-        return;
-
-    }
-
-
-    tg.requestContact(
-        function(success) {
-
-            if (!success) {
-
-                return;
-
-            }
-
-
-            const phoneField =
-                document.getElementById(
-                    "phone"
-                );
-
-
-            if (phoneField) {
-
-                phoneField.classList.add(
-                    "phone-shared"
-                );
-
-            }
-
-
-            alert(
-                "Номер телефона сохранён."
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   INTEREST
-========================================================= */
-
-function selectInterest(
-    element,
-    value
-) {
-
-    document
-        .querySelectorAll(
-            ".choice"
-        )
-        .forEach(
-            choice => {
-
-                choice.classList.remove(
-                    "selected"
-                );
-
-            }
-        );
-
-
-    element.classList.add(
-        "selected"
-    );
-
-
-    interest =
-        value;
-
-}
-
-
-/* =========================================================
-   FILES
-========================================================= */
-
-function selectPhotos() {
-
-    document
-        .getElementById(
-            "photoInput"
-        )
-        .click();
-
-}
-
-
-function selectVideos() {
-
-    document
-        .getElementById(
-            "videoInput"
-        )
-        .click();
-
-}
-
-
-function takePhoto() {
-
-    document
-        .getElementById(
-            "photoCamera"
-        )
-        .click();
-
-}
-
-
-function handleFiles(
-    files
-) {
-
-    const incoming =
-        Array.from(files);
-
-
-    const availableSlots =
-        10 -
-        selectedFiles.length;
-
-
-    if (
-        availableSlots <= 0
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-        return;
-
-    }
-
-
-    const filesToAdd =
-        incoming.slice(
-            0,
-            availableSlots
-        );
-
-
-    selectedFiles =
-        selectedFiles.concat(
-            filesToAdd
-        );
-
-
-    if (
-        incoming.length >
-        availableSlots
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-    }
-
-
-    renderFiles();
-
-}
-
-
-/* =========================================================
-   FILE SIZE
-========================================================= */
-
-function formatFileSize(
-    bytes
-) {
-
-    if (!bytes) {
-
-        return "0 KB";
-
-    }
-
-
-    const units = [
-        "B",
-        "KB",
-        "MB",
-        "GB"
-    ];
-
-
-    const index =
-        Math.floor(
-            Math.log(bytes) /
-            Math.log(1024)
-        );
-
-
-    const size =
-        bytes /
-        Math.pow(
-            1024,
-            index
-        );
-
-
-    return (
-        size.toFixed(
-            index === 0
-                ? 0
-                : 1
-        ) +
-        " " +
-        units[index]
-    );
-
-}
-
-
-/* =========================================================
-   RENDER FILES
-========================================================= */
-
-function renderFiles() {
-
-    const preview =
-        document.getElementById(
-            "preview"
-        );
-
-
-    const mediaHint =
-        document.getElementById(
-            "mediaHint"
-        );
-
-
-    preview.innerHTML =
-        "";
-
-
-    if (
-        selectedFiles.length === 0
-    ) {
-
-        mediaHint.style.display =
-            "block";
-
-    }
-
-    else {
-
-        mediaHint.style.display =
-            "none";
-
-    }
-
-
-    const mediaCounter =
-        document.getElementById(
-            "mediaCounter"
-        );
-
-
-    const photoButton =
-        document.getElementById(
-            "photoButton"
-        );
-
-
-    const videoButton =
-        document.getElementById(
-            "videoButton"
-        );
-
-
-    if (mediaCounter) {
-
-        mediaCounter.textContent =
-            selectedFiles.length +
-            " / 10 файлов";
-
-
-        mediaCounter.classList.toggle(
-            "limit",
-            selectedFiles.length === 10
-        );
-
-    }
-
-
-    const limitReached =
-        selectedFiles.length >= 10;
-
-
-    if (photoButton) {
-
-        photoButton.disabled =
-            limitReached;
-
-    }
-
-
-    if (videoButton) {
-
-        videoButton.disabled =
-            limitReached;
-
-    }
-
-
-    selectedFiles.forEach(
-        (
-            file,
-            index
-        ) => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "file-card";
-
-
-            const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
-
-            deleteButton.className =
-                "delete-file";
-
-            deleteButton.type =
-                "button";
-
-            deleteButton.innerHTML =
-                "×";
-
-
-            deleteButton.onclick =
-                function() {
-
-                    selectedFiles.splice(
-                        index,
-                        1
-                    );
-
-                    renderFiles();
-
-                };
-
-
-            card.appendChild(
-                deleteButton
+        const progressBar =
+            document.getElementById(
+                "progressBar"
             );
 
 
-            if (
-                file.type.startsWith(
-                    "image/"
-                )
-            ) {
-
-                const image =
-                    document.createElement(
-                        "img"
-                    );
-
-
-                image.src =
-                    URL.createObjectURL(
-                        file
-                    );
-
-
-                card.appendChild(
-                    image
-                );
-
-            }
-
-            else if (
-                file.type.startsWith(
-                    "video/"
-                )
-            ) {
-
-                const video =
-                    document.createElement(
-                        "video"
-                    );
-
-
-                video.src =
-                    URL.createObjectURL(
-                        file
-                    );
-
-
-                video.controls =
-                    true;
-
-
-                card.appendChild(
-                    video
-                );
-
-            }
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "file-name";
-
-
-            name.textContent =
-                file.name;
-
-
-            card.appendChild(
-                name
+        const percent =
+            Math.min(
+                currentScreen * 14,
+                100
             );
 
 
-            preview.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-function goToSummary() {
-
-    if (
-        selectedFiles.length === 0
-    ) {
-
-        alert(
-            "⚠️ Добавьте хотя бы одно фото или видео."
-        );
-
-        return;
+        progressBar.style.width =
+            percent + "%";
 
     }
 
 
-    if (
-        selectedFiles.length > 10
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-        return;
-
-    }
-
-
-    nextScreen(7);
-
-}
-
-
-function escapeHtml(
-    value
-) {
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-function buildSummary() {
-
-    const name =
-        document.getElementById(
-            "name"
-        ).value ||
-        "не указано";
-
-
-    const phone =
-        document.getElementById(
-            "phone"
-        ).value ||
-        "не указан";
-
-
-    const height =
-        document.getElementById(
-            "height"
-        ).value ||
-        "не указано";
-
-
-    const weight =
-        document.getElementById(
-            "weight"
-        ).value ||
-        "не указано";
-
-
-    const age =
-        document.getElementById(
-            "age"
-        ).value ||
-        "не указано";
-
-
-    const additional =
-        document.getElementById(
-            "additional"
-        ).value ||
-        "не указано";
-
-
-    const citizenship =
-        document.getElementById(
-            "citizenship"
-        ).value ||
-        "не указано";
-
-
-    const username =
-        user?.username
-            ? "@" + user.username
-            : "не указан";
-
-
-    const telegramId =
-        user?.id ||
-        "не указан";
-
-
-    document.getElementById(
-        "summary"
-    ).innerHTML = `
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Имя
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(name)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Telegram
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(username)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Telegram ID
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(
-                    String(telegramId)
-                )}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Телефон
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(phone)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Рост
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(height)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Вес
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(weight)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Возраст
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(age)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Дополнительно
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(additional)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Гражданство
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(citizenship)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Интерес
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(
-                    interest ||
-                    "не указан"
-                )}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Материалы
-            </div>
-
-            <div class="summary-value">
-                📎 ${selectedFiles.length} файлов
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   ОТПРАВКА АНКЕТЫ
-========================================================= */
-
-let submitted = false;
-
-
-async function submitForm() {
-
-    if (submitted) {
-
-        return;
-
-    }
-
-
-    if (
-        selectedFiles.length === 0
-    ) {
-
-        alert(
-            "⚠️ Добавьте хотя бы одно фото или видео перед отправкой анкеты."
-        );
-
-        nextScreen(6);
-
-        return;
-
-    }
-
-
-    if (
-        selectedFiles.length > 10
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-        nextScreen(6);
-
-        return;
-
-    }
-
-
-    const submitButton =
-        document.getElementById(
-            "submitButton"
-        );
-
-
-    const loading =
-        document.getElementById(
-            "loading"
-        );
-
-
-    submitButton.disabled =
-        true;
-
-
-    submitButton.textContent =
-        "Отправляем…";
-
-
-    loading.style.display =
-        "block";
-
-
-    try {
-
-        /* =====================================================
-           TELEGRAM INIT DATA
-        ===================================================== */
-
-        const initData =
-            tg?.initData || "";
-
-
-        if (!initData) {
-
-            throw new Error(
-                "Telegram initData не получен. Откройте приложение через Telegram."
-            );
-
-        }
-
-
-        /* =====================================================
-           APPLICATION
-        ===================================================== */
-
-        const application = {
-
-            type:
-                "application",
-
-
-            telegram_id:
-                user?.id ||
-                null,
-
-
-            telegram_username:
-                user?.username ||
-                null,
-
-
-            telegram_first_name:
-                user?.first_name ||
-                null,
-
-
-            telegram_last_name:
-                user?.last_name ||
-                null,
-
-
-            name:
-                document.getElementById(
-                    "name"
-                ).value,
-
-
-            phone:
-                document.getElementById(
-                    "phone"
-                ).value,
-
-
-            height:
-                document.getElementById(
-                    "height"
-                ).value,
-
-
-            weight:
-                document.getElementById(
-                    "weight"
-                ).value,
-
-
-            age:
-                document.getElementById(
-                    "age"
-                ).value,
-
-
-            additional:
-                document.getElementById(
-                    "additional"
-                ).value,
-
-
-            citizenship:
-                document.getElementById(
-                    "citizenship"
-                ).value,
-
-
-            interest:
-                interest,
-
-
-            files_count:
-                selectedFiles.length,
-
-
-            submitted_at:
-                new Date()
-                    .toISOString()
-
-        };
-
-
-        /* =====================================================
-           FORMDATA
-        ===================================================== */
-
-        const formData =
-            new FormData();
-
-
-        /* Telegram initData */
-
-        formData.append(
-            "initData",
-            initData
-        );
-
-
-        /* Данные анкеты */
-
-        formData.append(
-            "application",
-            JSON.stringify(
-                application
-            )
-        );
-
-
-        /* =====================================================
-           FILES
-        ===================================================== */
-
-        selectedFiles.forEach(
-            file => {
-
-                formData.append(
-                    "files",
-                    file,
-                    file.name
-                );
-
-            }
-        );
-
-
-        /* =====================================================
-           CLOUDFLARE WORKER
-        ===================================================== */
-
-        const response =
-            await fetch(
-                "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev",
-                {
-                    method:
-                        "POST",
-
-                    body:
-                        formData
-                }
-            );
-
-
-        const result =
-            await response.text();
-
-
-        console.log(
-            "SERVER RESPONSE:",
-            result
-        );
-
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                result ||
-                "Ошибка отправки"
-            );
-
-        }
-
-
-        /* =====================================================
-           УСПЕШНАЯ ОТПРАВКА
-        ===================================================== */
-
-        submitted =
-            true;
-
+    /*
+     * ==========================================
+     * ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
+     * ==========================================
+     */
+
+    function nextScreen(screenNumber) {
 
         document
             .querySelectorAll(
@@ -2713,68 +793,1111 @@ async function submitForm() {
             );
 
 
-        document
-            .getElementById(
-                "successScreen"
-            )
-            .classList.add(
-                "active"
+        const target =
+            document.getElementById(
+                "screen" +
+                screenNumber
             );
 
 
-        document
-            .getElementById(
-                "progressBar"
-            )
-            .style.width =
-            "100%";
+        if (target) {
+
+            target.classList.add(
+                "active"
+            );
+
+        }
 
 
-        window.scrollTo(
-            0,
-            0
-        );
+        currentScreen =
+            screenNumber;
 
+
+        updateProgress();
+
+
+        if (
+            screenNumber === 7
+        ) {
+
+            buildSummary();
+
+        }
 
     }
 
-    catch (error) {
 
-        console.error(
-            "SUBMIT ERROR:",
-            error
+    /*
+     * ==========================================
+     * TELEGRAM PHONE
+     * ==========================================
+     */
+
+    /* =========================================================
+   PHONE AUTOFILL FROM WORKER / KV
+========================================================= */
+
+let phonePollingPromise = null;
+
+async function waitForPhone() {
+
+    if (phonePollingPromise) {
+        return phonePollingPromise;
+    }
+
+    phonePollingPromise = (async function() {
+
+        const phoneField =
+            document.getElementById("phone");
+
+        if (!phoneField) {
+            return;
+        }
+
+        const initData =
+            tg?.initData || "";
+
+        if (!initData) {
+            console.warn(
+                "Telegram initData отсутствует."
+            );
+            return;
+        }
+
+        for (
+            let attempt = 0;
+            attempt < 30;
+            attempt++
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev/phone",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    initData:
+                                        initData
+                                })
+                        }
+                    );
+
+                if (response.ok) {
+
+                    const data =
+                        await response.json();
+
+                    if (data.phone) {
+
+                        phoneField.value =
+                            data.phone;
+
+                        phoneField.classList.add(
+                            "phone-shared"
+                        );
+
+                        return data.phone;
+                    }
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "PHONE AUTOFILL ERROR:",
+                    error
+                );
+            }
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        1000
+                    )
+            );
+        }
+
+        console.warn(
+            "Телефон не найден в KV за 30 секунд."
         );
 
+        return null;
+
+    })();
+
+    try {
+        return await phonePollingPromise;
+    } finally {
+        phonePollingPromise = null;
+    }
+}
+
+
+function requestPhone() {
+
+    if (!tg) {
 
         alert(
-            "Не удалось отправить анкету.\n\n" +
-            error.message
+            "Telegram WebApp недоступен."
         );
 
-
-        submitButton.disabled =
-            false;
-
-
-        submitButton.textContent =
-            "✈️ Отправить анкету";
-
-
-        loading.style.display =
-            "none";
-
+        return;
     }
 
+    /*
+     * Telegram отправляет контакт боту,
+     * а номер появляется на сервере через webhook.
+     * После разрешения начинаем опрашивать Worker /phone.
+     */
+
+    tg.requestContact(
+        async function(success) {
+
+            if (!success) {
+                return;
+            }
+
+            const phoneField =
+                document.getElementById("phone");
+
+            if (phoneField) {
+
+                phoneField.classList.add(
+                    "phone-shared"
+                );
+            }
+
+            await waitForPhone();
+
+        }
+    );
 }
 
 
 /* =========================================================
-   INITIAL RENDER
+   TELEGRAM CONTACT EVENT
 ========================================================= */
 
-renderFiles();
+if (tg && typeof tg.onEvent === "function") {
 
-updateProgress();
+    tg.onEvent(
+        "contactRequested",
+        function(event) {
+
+            if (
+                event &&
+                event.status === "sent"
+            ) {
+
+                waitForPhone();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+    /*
+     * ==========================================
+     * INTEREST
+     * ==========================================
+     */
+
+    /* =========================================================
+   AUTO RESTORE PHONE ON APP OPEN
+========================================================= */
+
+waitForPhone();
+
+
+function selectInterest(
+        element,
+        value
+    ) {
+
+        document
+            .querySelectorAll(
+                ".choice"
+            )
+            .forEach(
+                choice => {
+
+                    choice.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+        element.classList.add(
+            "selected"
+        );
+
+
+        interest =
+            value;
+
+    }
+
+
+    /*
+     * ==========================================
+     * FILES
+     * ==========================================
+     */
+
+    function handleFiles(
+        files
+    ) {
+
+        const incoming =
+            Array.from(files);
+
+
+        const availableSlots =
+            10 -
+            selectedFiles.length;
+
+
+        if (
+            availableSlots <= 0
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        const filesToAdd =
+            incoming.slice(
+                0,
+                availableSlots
+            );
+
+
+        selectedFiles =
+            selectedFiles.concat(
+                filesToAdd
+            );
+
+
+        if (
+            incoming.length >
+            availableSlots
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+        }
+
+
+        renderFiles();
+
+    }
+
+
+    /*
+     * ==========================================
+     * RENDER FILES
+     * ==========================================
+     */
+
+    function renderFiles() {
+
+        const preview =
+            document.getElementById(
+                "preview"
+            );
+
+
+        const mediaHint =
+            document.getElementById(
+                "mediaHint"
+            );
+
+
+        preview.innerHTML =
+            "";
+
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            mediaHint.style.display =
+                "block";
+
+        } else {
+
+            mediaHint.style.display =
+                "none";
+
+        }
+
+
+        selectedFiles.forEach(
+            (
+                file,
+                index
+            ) => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "file-card";
+
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                deleteButton.className =
+                    "delete-file";
+
+
+                deleteButton.type =
+                    "button";
+
+
+                deleteButton.innerHTML =
+                    "×";
+
+
+                deleteButton.onclick =
+                    function() {
+
+                        selectedFiles.splice(
+                            index,
+                            1
+                        );
+
+
+                        renderFiles();
+
+                    };
+
+
+                card.appendChild(
+                    deleteButton
+                );
+
+
+                if (
+                    file.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    image.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    card.appendChild(
+                        image
+                    );
+
+                }
+
+                else if (
+                    file.type.startsWith(
+                        "video/"
+                    )
+                ) {
+
+                    const video =
+                        document.createElement(
+                            "video"
+                        );
+
+
+                    video.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    video.controls =
+                        true;
+
+
+                    card.appendChild(
+                        video
+                    );
+
+                }
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "file-name";
+
+
+                name.textContent =
+                    file.name;
+
+
+                card.appendChild(
+                    name
+                );
+
+
+                preview.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ПЕРЕХОД К SUMMARY
+     * ==========================================
+     */
+
+    function goToSummary() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        nextScreen(7);
+
+    }
+
+
+    /*
+     * ==========================================
+     * SUMMARY
+     * ==========================================
+     */
+
+    function buildSummary() {
+
+        const name =
+            document.getElementById(
+                "name"
+            ).value ||
+            "не указано";
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value ||
+            "не указан";
+
+
+        const height =
+            document.getElementById(
+                "height"
+            ).value ||
+            "не указано";
+
+
+        const weight =
+            document.getElementById(
+                "weight"
+            ).value ||
+            "не указано";
+
+
+        const age =
+            document.getElementById(
+                "age"
+            ).value ||
+            "не указано";
+
+
+        const additional =
+            document.getElementById(
+                "additional"
+            ).value ||
+            "не указано";
+
+
+        const citizenship =
+            document.getElementById(
+                "citizenship"
+            ).value ||
+            "не указано";
+
+
+        const username =
+            user?.username
+                ? "@" + user.username
+                : "не указан";
+
+
+        const telegramId =
+            user?.id ||
+            "не указан";
+
+
+        document.getElementById(
+            "summary"
+        ).innerHTML = `
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Имя
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(name)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Telegram username
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(username)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Telegram ID
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(
+                        String(telegramId)
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Телефон
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(phone)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Рост
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(height)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Вес
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(weight)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Возраст
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(age)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Дополнительно
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(additional)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Гражданство
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(citizenship)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Интерес
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(
+                        interest ||
+                        "не указан"
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Файлы
+                </div>
+
+                <div class="summary-value">
+                    ${selectedFiles.length}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+     * ==========================================
+     * HTML SECURITY
+     * ==========================================
+     */
+
+    function escapeHtml(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /*
+     * ==========================================
+     * ОТПРАВКА АНКЕТЫ
+     * ==========================================
+     */
+
+    async function submitForm() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео перед отправкой анкеты."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
+
+
+        const loading =
+            document.getElementById(
+                "loading"
+            );
+
+
+        submitButton.disabled =
+            true;
+
+
+        loading.style.display =
+            "block";
+
+
+        try {
+
+            /*
+             * Настоящий initData
+             * от Telegram Mini App.
+             *
+             * Он понадобится Worker
+             * для серверной проверки
+             * пользователя.
+             */
+
+            const initData =
+                tg?.initData || "";
+
+
+            /*
+             * Данные заявки.
+             */
+
+            const application = {
+
+                type:
+                    "application",
+
+
+                telegram_id:
+                    user?.id ||
+                    null,
+
+
+                telegram_username:
+                    user?.username ||
+                    null,
+
+
+                telegram_first_name:
+                    user?.first_name ||
+                    null,
+
+
+                telegram_last_name:
+                    user?.last_name ||
+                    null,
+
+
+                name:
+                    document.getElementById(
+                        "name"
+                    ).value,
+
+
+                phone:
+                    document.getElementById(
+                        "phone"
+                    ).value,
+
+
+                height:
+                    document.getElementById(
+                        "height"
+                    ).value,
+
+
+                weight:
+                    document.getElementById(
+                        "weight"
+                    ).value,
+
+
+                age:
+                    document.getElementById(
+                        "age"
+                    ).value,
+
+
+                additional:
+                    document.getElementById(
+                        "additional"
+                    ).value,
+
+
+                citizenship:
+                    document.getElementById(
+                        "citizenship"
+                    ).value,
+
+
+                interest:
+                    interest,
+
+
+                files_count:
+                    selectedFiles.length,
+
+
+                submitted_at:
+                    new Date()
+                        .toISOString()
+
+            };
+
+
+            /*
+             * FormData.
+             */
+
+            const formData =
+                new FormData();
+
+
+            /*
+             * Передаём Telegram initData.
+             */
+
+            formData.append(
+                "initData",
+                initData
+            );
+
+
+            /*
+             * Передаём заявку.
+             */
+
+            formData.append(
+                "application",
+                JSON.stringify(
+                    application
+                )
+            );
+
+
+            /*
+             * Передаём фотографии
+             * и видео.
+             */
+
+            selectedFiles.forEach(
+                file => {
+
+                    formData.append(
+                        "files",
+                        file,
+                        file.name
+                    );
+
+                }
+            );
+
+
+            /*
+             * Отправка на Cloudflare Worker.
+             */
+
+            const response =
+                await fetch(
+                    "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev",
+                    {
+                        method:
+                            "POST",
+
+                        body:
+                            formData
+                    }
+                );
+
+
+            const result =
+                await response.text();
+
+
+            console.log(
+                "SERVER RESPONSE:",
+                result
+            );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    result ||
+                    "Ошибка отправки"
+                );
+
+            }
+
+
+            /*
+             * Показываем успех.
+             */
+
+            document
+                .querySelectorAll(
+                    ".screen"
+                )
+                .forEach(
+                    screen => {
+
+                        screen.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "successScreen"
+                )
+                .classList.add(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "progressBar"
+                )
+                .style.width =
+                "100%";
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Не удалось отправить анкету.\n\n" +
+                error.message
+            );
+
+
+            submitButton.disabled =
+                false;
+
+
+            loading.style.display =
+                "none";
+
+        }
+
+    }
 
 </script>
 
