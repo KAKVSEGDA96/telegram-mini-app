@@ -3,1437 +3,1184 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Анкета</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            min-height: 100%;
+            background: #08090b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(255, 128, 0, .10),
+                    transparent 34%
+                ),
+                radial-gradient(
+                    circle at 100% 40%,
+                    rgba(255, 255, 255, .035),
+                    transparent 30%
+                ),
+                #08090b;
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
->
+            color: #f5f5f7;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                Arial,
+                sans-serif;
 
-<title>Scout bot</title>
+            overflow-x: hidden;
+        }
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
 
-<style>
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.025),
+                    transparent 35%,
+                    rgba(255,128,0,.018)
+                );
 
-/* =========================================================
-   RESET
-========================================================= */
+            z-index: -1;
+        }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
+        button {
+            -webkit-appearance: none;
+        }
 
-    background: #050607;
 
-    color: #f5f5f7;
+        /* =========================================================
+           APP
+        ========================================================= */
 
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Arial,
-        sans-serif;
-}
+        .app {
+            width: 100%;
+            max-width: 620px;
 
-body {
-    overflow-x: hidden;
-}
+            margin: 0 auto;
 
-button,
-input,
-textarea {
-    font-family: inherit;
-}
+            padding:
+                max(18px, env(safe-area-inset-top))
+                16px
+                calc(34px + env(safe-area-inset-bottom));
+        }
 
 
-/* =========================================================
-   BACKGROUND
-========================================================= */
+        /* =========================================================
+           PROGRESS
+        ========================================================= */
 
-body::before {
-    content: "";
+        .progress {
+            position: relative;
 
-    position: fixed;
+            width: 100%;
+            height: 5px;
 
-    inset: 0;
+            margin:
+                3px 0
+                30px;
 
-    pointer-events: none;
+            border-radius: 999px;
 
-    background:
-        radial-gradient(
-            circle at 15% 0%,
-            rgba(255, 105, 0, .08),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 100% 45%,
-            rgba(255, 120, 0, .055),
-            transparent 35%
-        );
+            background:
+                rgba(255,255,255,.07);
 
-    z-index: -2;
-}
+            overflow: hidden;
 
-body::after {
-    content: "";
+            box-shadow:
+                inset 0 1px 1px rgba(255,255,255,.04);
+        }
 
-    position: fixed;
+        .progress-bar {
+            height: 100%;
+            width: 14%;
 
-    inset: 0;
+            border-radius: 999px;
 
-    pointer-events: none;
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff7a00,
+                    #ff9b3d
+                );
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.018),
-            transparent 40%
-        );
+            box-shadow:
+                0 0 14px rgba(255,128,0,.42);
 
-    z-index: -1;
-}
+            transition:
+                width .45s cubic-bezier(.22,1,.36,1);
+        }
 
 
-/* =========================================================
-   APP
-========================================================= */
+        /* =========================================================
+           SCREENS
+        ========================================================= */
 
-.app {
+        .screen {
+            display: none;
+        }
 
-    width: 100%;
+        .screen.active {
+            display: block;
 
-    max-width: 620px;
+            animation:
+                screenIn
+                .38s
+                cubic-bezier(.22,1,.36,1);
+        }
 
-    margin: 0 auto;
+        @keyframes screenIn {
 
-    padding:
-        max(12px, env(safe-area-inset-top))
-        14px
-        calc(28px + env(safe-area-inset-bottom));
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(.985);
+            }
 
-}
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
 
+        }
 
-/* =========================================================
-   WELCOME SCREEN
-========================================================= */
 
-#welcomeScreen {
-    display: block;
-}
+        /* =========================================================
+           TYPOGRAPHY
+        ========================================================= */
 
-.welcome {
+        h1,
+        h2 {
+            margin: 0;
 
-    min-height:
-        calc(
-            100vh -
-            env(safe-area-inset-top) -
-            env(safe-area-inset-bottom)
-        );
+            color: #f5f5f7;
 
-    display: flex;
+            letter-spacing: -.035em;
+            font-weight: 700;
+        }
 
-    flex-direction: column;
+        h1 {
+            font-size: 32px;
+            line-height: 1.08;
+        }
 
-    justify-content: center;
+        h2 {
+            font-size: 29px;
+            line-height: 1.1;
+        }
 
-    padding:
-        8px 0 25px;
+        .subtitle {
+            margin:
+                10px
+                0
+                28px;
 
-}
+            color: rgba(235,235,245,.58);
 
+            font-size: 16px;
+            line-height: 1.45;
 
-/* =========================================================
-   WELCOME BANNER
-========================================================= */
+            letter-spacing: -.01em;
+        }
 
-.welcome-banner {
 
-    width: 100%;
+        /* =========================================================
+           GLASS PANEL
+        ========================================================= */
 
-    display: block;
+        .field {
+            margin-bottom: 17px;
+        }
 
-    border-radius: 27px;
+        label {
+            display: block;
 
-    overflow: hidden;
+            margin:
+                0
+                0
+                8px
+                5px;
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
+            color:
+                rgba(235,235,245,.62);
 
-    background: #0b0c0e;
+            font-size: 13px;
+            font-weight: 600;
 
-    box-shadow:
-        0 18px 55px
-        rgba(0,0,0,.48),
+            letter-spacing: -.01em;
+        }
 
-        inset 0 1px 0
-        rgba(255,255,255,.07);
+        input,
+        textarea {
 
-}
+            width: 100%;
 
-.welcome-banner img {
+            border:
+                1px solid
+                rgba(255,255,255,.09);
 
-    width: 100%;
+            outline: none;
 
-    height: auto;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.075),
+                    rgba(255,255,255,.035)
+                );
 
-    display: block;
+            color: #f5f5f7;
 
-}
+            border-radius: 19px;
 
+            padding: 17px 17px;
 
-/* =========================================================
-   WELCOME BUTTON
-========================================================= */
+            font-size: 17px;
 
-.welcome-button {
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.06),
+                0 8px 30px
+                    rgba(0,0,0,.18);
 
-    position: relative;
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
 
-    width: 100%;
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                box-shadow .2s ease,
+                transform .2s ease;
+        }
 
-    min-height: 74px;
+        input::placeholder,
+        textarea::placeholder {
+            color:
+                rgba(235,235,245,.30);
+        }
 
-    margin-top: 14px;
+        input:focus,
+        textarea:focus {
 
-    padding: 0 25px;
+            border-color:
+                rgba(255,128,0,.42);
 
-    border-radius: 25px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.095),
+                    rgba(255,255,255,.045)
+                );
 
-    border:
-        1px solid
-        rgba(255,128,0,.65);
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.08),
+                0 0 0 3px
+                    rgba(255,128,0,.07),
+                0 12px 35px
+                    rgba(0,0,0,.25);
+        }
 
-    color: #fff;
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
 
-    background:
 
-        linear-gradient(
-            135deg,
-            rgba(255,128,0,.22),
-            rgba(255,92,0,.09)
-        );
+        /* =========================================================
+           HINT
+        ========================================================= */
 
-    box-shadow:
+        .hint {
+            margin-top: 8px;
+            padding-left: 5px;
 
-        0 0 0 1px
-        rgba(255,128,0,.08),
+            color:
+                rgba(235,235,245,.43);
 
-        0 0 28px
-        rgba(255,105,0,.20),
+            font-size: 13px;
+            line-height: 1.4;
+        }
 
-        inset 0 1px 0
-        rgba(255,255,255,.13);
 
-    backdrop-filter:
-        blur(25px);
+        /* =========================================================
+           BUTTONS — LIQUID GLASS
+        ========================================================= */
 
-    -webkit-backdrop-filter:
-        blur(25px);
+        button {
 
-    font-size: 20px;
+            position: relative;
 
-    font-weight: 700;
+            width: 100%;
 
-    letter-spacing: -.02em;
+            border:
+                1px solid
+                rgba(255,255,255,.12);
 
-    display: flex;
+            border-radius: 19px;
 
-    align-items: center;
+            padding: 17px 18px;
 
-    justify-content: center;
+            margin-top: 10px;
 
-    gap: 13px;
+            color: #fff;
 
-    cursor: pointer;
+            font-size: 17px;
+            font-weight: 650;
 
-    overflow: hidden;
+            letter-spacing: -.015em;
 
-    transition:
-        transform .16s ease,
-        box-shadow .2s ease;
-}
+            cursor: pointer;
 
-.welcome-button::before {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.13),
+                    rgba(255,255,255,.055)
+                );
 
-    content: "";
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.09),
+                0 9px 30px
+                    rgba(0,0,0,.22);
 
-    position: absolute;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
 
-    inset: 1px;
+            overflow: hidden;
 
-    border-radius: 23px;
+            transition:
+                transform .16s ease,
+                background .2s ease,
+                border-color .2s ease,
+                box-shadow .2s ease,
+                opacity .2s ease;
+        }
 
-    background:
-        linear-gradient(
-            105deg,
-            transparent 15%,
-            rgba(255,255,255,.10),
-            transparent 45%
-        );
+        button::before {
 
-    transform:
-        translateX(-110%);
+            content: "";
 
-    animation:
-        glassShine 4s
-        infinite;
+            position: absolute;
 
-}
+            top: 0;
+            left: 10%;
+            right: 10%;
 
-@keyframes glassShine {
+            height: 1px;
 
-    0% {
-        transform: translateX(-110%);
-    }
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,.25),
+                    transparent
+                );
 
-    45%,
-    100% {
-        transform: translateX(110%);
-    }
+            pointer-events: none;
+        }
 
-}
+        button:active:not(:disabled) {
 
-.welcome-button:active {
+            transform:
+                scale(.975);
 
-    transform:
-        scale(.975);
+            background:
+                rgba(255,255,255,.13);
 
-    box-shadow:
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.06),
+                0 4px 18px
+                    rgba(0,0,0,.22);
+        }
 
-        0 0 35px
-        rgba(255,105,0,.35),
+        button.secondary {
 
-        inset 0 1px 0
-        rgba(255,255,255,.15);
-}
+            color:
+                rgba(245,245,247,.76);
 
-.welcome-rocket {
+            background:
+                rgba(255,255,255,.045);
 
-    font-size: 25px;
+            border-color:
+                rgba(255,255,255,.075);
+        }
 
-    position: relative;
+        button.contact {
 
-    z-index: 1;
-}
+            color: #fff;
 
-.welcome-button span {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,128,0,.22),
+                    rgba(255,128,0,.08)
+                );
 
-    position: relative;
+            border-color:
+                rgba(255,128,0,.30);
 
-    z-index: 1;
-}
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.08),
+                0 8px 28px
+                    rgba(255,128,0,.10);
+        }
 
-.welcome-arrow {
+        button:not(.secondary):not(.contact) {
 
-    position: absolute;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,128,0,.19),
+                    rgba(255,255,255,.065)
+                );
 
-    right: 23px;
+            border-color:
+                rgba(255,128,0,.24);
+        }
 
-    font-size: 31px;
+        button:disabled {
 
-    font-weight: 300;
+            opacity: .35;
 
-    color:
-        #ff8b2b;
-}
+            cursor: default;
 
+            transform: none !important;
 
-/* =========================================================
-   FORM
-========================================================= */
+            box-shadow:
+                none;
+        }
 
-#formApp {
-    display: none;
-}
 
+        /* =========================================================
+           CHOICES
+        ========================================================= */
 
-/* =========================================================
-   HEADER
-========================================================= */
+        .choice {
 
-.app-header {
+            position: relative;
 
-    position: relative;
+            margin-bottom: 10px;
 
-    height: 52px;
+            padding: 17px 18px;
 
-    display: flex;
+            border-radius: 19px;
 
-    align-items: center;
+            border:
+                1px solid
+                rgba(255,255,255,.08);
 
-    justify-content: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.075),
+                    rgba(255,255,255,.035)
+                );
 
-    margin-bottom: 8px;
-}
+            color:
+                rgba(245,245,247,.88);
 
-.app-title {
+            font-size: 17px;
+            font-weight: 550;
 
-    text-align: center;
-}
+            cursor: pointer;
 
-.app-title strong {
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.05),
+                0 8px 25px
+                    rgba(0,0,0,.16);
 
-    display: block;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
 
-    font-size: 19px;
+            transition:
+                .2s ease;
+        }
 
-    line-height: 1.1;
+        .choice:active {
 
-    letter-spacing: -.025em;
-}
+            transform:
+                scale(.98);
+        }
 
-.app-title span {
+        .choice.selected {
 
-    display: block;
+            color: #fff;
 
-    margin-top: 3px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,128,0,.26),
+                    rgba(255,128,0,.09)
+                );
 
-    color:
-        rgba(235,235,245,.43);
+            border-color:
+                rgba(255,128,0,.42);
 
-    font-size: 12px;
-}
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.08),
+                0 8px 30px
+                    rgba(255,128,0,.12);
+        }
 
-.close-button {
+        .choice.selected::after {
 
-    position: absolute;
+            content: "✓";
 
-    left: 0;
+            position: absolute;
 
-    width: auto;
+            right: 17px;
+            top: 50%;
 
-    margin: 0;
+            transform:
+                translateY(-50%);
 
-    padding: 7px 5px;
+            color:
+                #ff9638;
 
-    border: 0;
+            font-weight: 700;
+        }
 
-    background: transparent;
 
-    box-shadow: none;
+        /* =========================================================
+           UPLOAD
+        ========================================================= */
 
-    color:
-        #0a84ff;
+        .upload-buttons {
 
-    font-size: 17px;
+            display: grid;
 
-    font-weight: 500;
-}
+            grid-template-columns:
+                repeat(2, 1fr);
 
+            gap: 10px;
 
-/* =========================================================
-   PROGRESS
-========================================================= */
+            margin-top: 17px;
+        }
 
-.progress {
+        .upload-buttons button {
 
-    width: 100%;
+            margin-top: 0;
 
-    height: 5px;
+            padding:
+                16px 10px;
 
-    margin:
-        4px 0 27px;
+            font-size: 15px;
+        }
 
-    border-radius: 999px;
+        .media-counter {
 
-    overflow: hidden;
+            margin-top: 13px;
 
-    background:
-        rgba(255,255,255,.075);
-}
+            padding: 12px 15px;
 
-.progress-bar {
+            border-radius: 16px;
 
-    width: 14%;
+            border:
+                1px solid
+                rgba(255,255,255,.07);
 
-    height: 100%;
+            background:
+                rgba(255,255,255,.045);
 
-    border-radius: 999px;
+            color:
+                rgba(235,235,245,.60);
 
-    background:
-        linear-gradient(
-            90deg,
-            #ff7200,
-            #ff9b3c
-        );
+            font-size: 14px;
+            font-weight: 650;
 
-    box-shadow:
-        0 0 15px
-        rgba(255,112,0,.55);
+            text-align: center;
 
-    transition:
-        width .4s
-        cubic-bezier(.22,1,.36,1);
-}
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
 
+        .media-counter.limit {
 
-/* =========================================================
-   SCREENS
-========================================================= */
+            color:
+                #ff9638;
 
-.screen {
-    display: none;
-}
+            border-color:
+                rgba(255,128,0,.25);
 
-.screen.active {
+            background:
+                rgba(255,128,0,.07);
+        }
 
-    display: block;
+        #mediaHint {
 
-    animation:
-        screenIn
-        .35s
-        cubic-bezier(.22,1,.36,1);
-}
+            color:
+                #ff9638 !important;
 
-@keyframes screenIn {
+            font-weight: 600;
 
-    from {
+            background:
+                rgba(255,128,0,.055);
 
-        opacity: 0;
+            border:
+                1px solid
+                rgba(255,128,0,.12);
 
-        transform:
-            translateY(9px);
+            padding:
+                11px 13px;
 
-    }
+            border-radius: 14px;
+        }
 
-    to {
 
-        opacity: 1;
+        /* =========================================================
+           PREVIEW
+        ========================================================= */
 
-        transform:
-            translateY(0);
+        .preview {
 
-    }
+            margin-top: 18px;
 
-}
+            display: grid;
 
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
 
-/* =========================================================
-   TITLES
-========================================================= */
+            gap: 11px;
+        }
 
-h1,
-h2 {
+        .file-card {
 
-    margin: 0;
+            position: relative;
 
-    color: #f5f5f7;
+            overflow: hidden;
 
-    letter-spacing: -.04em;
+            min-height: 160px;
 
-    font-weight: 750;
-}
+            border-radius: 18px;
 
-h1 {
+            border:
+                1px solid
+                rgba(255,255,255,.09);
 
-    font-size: 34px;
+            background:
+                rgba(255,255,255,.055);
 
-    line-height: 1.05;
-}
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.06),
+                0 10px 30px
+                    rgba(0,0,0,.25);
 
-h2 {
+            animation:
+                fileIn
+                .28s
+                cubic-bezier(.22,1,.36,1);
+        }
 
-    font-size: 29px;
+        @keyframes fileIn {
 
-    line-height: 1.08;
-}
+            from {
+                opacity: 0;
+                transform: scale(.94);
+            }
 
-.subtitle {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
 
-    margin:
-        10px 0 27px;
+        }
 
-    color:
-        rgba(235,235,245,.57);
+        .file-card img,
+        .file-card video {
 
-    font-size: 16px;
+            width: 100%;
 
-    line-height: 1.42;
-}
+            height: 145px;
 
+            object-fit: cover;
 
-/* =========================================================
-   FIELD
-========================================================= */
+            display: block;
 
-.field {
-    margin-bottom: 17px;
-}
+            background: #101114;
+        }
 
-label {
+        .file-card video {
 
-    display: block;
+            border: 0;
+        }
 
-    margin:
-        0 0 8px 5px;
+        .file-name {
 
-    color:
-        rgba(235,235,245,.63);
+            padding:
+                9px 10px 2px;
 
-    font-size: 14px;
+            color:
+                rgba(245,245,247,.82);
 
-    font-weight: 600;
-}
+            font-size: 11px;
 
-input,
-textarea {
+            line-height: 1.25;
 
-    width: 100%;
+            word-break: break-word;
 
-    min-height: 57px;
+            white-space: nowrap;
 
-    border-radius: 19px;
+            overflow: hidden;
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
+            text-overflow: ellipsis;
+        }
 
-    outline: none;
+        .file-size {
 
-    padding:
-        15px 17px;
+            padding:
+                2px 10px 10px;
 
-    color: #fff;
+            color:
+                rgba(235,235,245,.38);
 
-    background:
+            font-size: 10px;
+        }
 
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.075),
-            rgba(255,255,255,.035)
-        );
+        .video-badge {
 
-    box-shadow:
+            position: absolute;
 
-        inset 0 1px 0
-        rgba(255,255,255,.06),
+            left: 8px;
+            top: 8px;
 
-        0 8px 30px
-        rgba(0,0,0,.22);
+            padding:
+                6px 9px;
 
-    backdrop-filter:
-        blur(22px);
+            border-radius: 10px;
 
-    -webkit-backdrop-filter:
-        blur(22px);
+            background:
+                rgba(0,0,0,.58);
 
-    font-size: 17px;
+            color: #fff;
 
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
-}
+            font-size: 11px;
+            font-weight: 650;
 
-input:focus,
-textarea:focus {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
 
-    border-color:
-        rgba(255,128,0,.50);
+        .delete-file {
 
-    box-shadow:
+            position: absolute;
 
-        0 0 0 3px
-        rgba(255,128,0,.08),
+            top: 8px;
+            right: 8px;
 
-        0 10px 30px
-        rgba(0,0,0,.25);
-}
+            width: 31px;
+            height: 31px;
 
-input::placeholder,
-textarea::placeholder {
+            min-width: 31px;
 
-    color:
-        rgba(235,235,245,.29);
-}
+            margin: 0;
 
-textarea {
+            padding: 0;
 
-    min-height: 145px;
+            border-radius: 50%;
 
-    resize: vertical;
-}
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
+            background:
+                rgba(0,0,0,.62);
 
-/* =========================================================
-   HINT
-========================================================= */
+            border:
+                1px solid
+                rgba(255,255,255,.15);
 
-.hint {
+            color: #fff;
 
-    margin:
-        8px 4px 0;
+            font-size: 20px;
+            line-height: 1;
 
-    color:
-        rgba(235,235,245,.42);
+            box-shadow:
+                0 4px 12px
+                    rgba(0,0,0,.3);
 
-    font-size: 13px;
+            z-index: 3;
+        }
 
-    line-height: 1.4;
-}
+        .delete-file:active {
 
+            transform:
+                scale(.9);
+        }
 
-/* =========================================================
-   BUTTONS
-========================================================= */
 
-button {
+        /* =========================================================
+           SUMMARY
+        ========================================================= */
 
-    width: 100%;
+        .summary {
 
-    min-height: 57px;
+            display: flex;
 
-    margin-top: 10px;
+            flex-direction: column;
 
-    border-radius: 19px;
+            gap: 10px;
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
+            margin-bottom: 18px;
+        }
 
-    color: #fff;
+        .summary-row {
 
-    background:
+            position: relative;
 
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.075),
-            rgba(255,255,255,.035)
-        );
+            padding:
+                14px 16px;
 
-    box-shadow:
+            border-radius: 17px;
 
-        inset 0 1px 0
-        rgba(255,255,255,.07),
+            border:
+                1px solid
+                rgba(255,255,255,.075);
 
-        0 9px 28px
-        rgba(0,0,0,.23);
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.075),
+                    rgba(255,255,255,.035)
+                );
 
-    backdrop-filter:
-        blur(22px);
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.045),
+                0 7px 24px
+                    rgba(0,0,0,.16);
 
-    -webkit-backdrop-filter:
-        blur(22px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
 
-    font-size: 17px;
+            animation:
+                summaryIn
+                .28s
+                ease both;
+        }
 
-    font-weight: 650;
+        @keyframes summaryIn {
 
-    cursor: pointer;
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
 
-    transition:
-        transform .15s ease,
-        border-color .2s ease,
-        background .2s ease;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-button:active:not(:disabled) {
+        }
 
-    transform:
-        scale(.975);
-}
+        .summary-title {
 
-button.secondary {
+            margin-bottom: 5px;
 
-    color:
-        rgba(245,245,247,.74);
+            color:
+                rgba(235,235,245,.42);
 
-    background:
-        rgba(255,255,255,.045);
-}
+            font-size: 12px;
+            font-weight: 600;
 
-button.primary {
+            text-transform: uppercase;
 
-    border-color:
-        rgba(255,128,0,.48);
+            letter-spacing: .035em;
+        }
 
-    background:
+        .summary-value {
 
-        linear-gradient(
-            135deg,
-            rgba(255,128,0,.25),
-            rgba(255,128,0,.08)
-        );
+            color:
+                rgba(250,250,252,.93);
 
-    box-shadow:
+            font-size: 16px;
 
-        0 0 22px
-        rgba(255,105,0,.13),
+            line-height: 1.35;
 
-        inset 0 1px 0
-        rgba(255,255,255,.10);
-}
+            word-break: break-word;
+        }
 
-button.contact {
+        .summary-row:last-child {
 
-    border-color:
-        rgba(255,128,0,.43);
+            border-color:
+                rgba(255,128,0,.18);
 
-    background:
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,128,0,.11),
+                    rgba(255,255,255,.035)
+                );
+        }
 
-        linear-gradient(
-            135deg,
-            rgba(255,128,0,.23),
-            rgba(255,128,0,.07)
-        );
 
-    box-shadow:
+        /* =========================================================
+           LOADING
+        ========================================================= */
 
-        0 0 22px
-        rgba(255,105,0,.12),
+        .loading {
 
-        inset 0 1px 0
-        rgba(255,255,255,.09);
-}
+            display: none;
 
-button.success-contact {
+            margin-top: 14px;
 
-    border-color:
-        rgba(52,199,89,.38);
+            padding: 13px;
 
-    background:
+            border-radius: 15px;
 
-        linear-gradient(
-            135deg,
-            rgba(52,199,89,.20),
-            rgba(52,199,89,.06)
-        );
-}
+            color:
+                rgba(235,235,245,.58);
 
-button:disabled {
+            background:
+                rgba(255,255,255,.045);
 
-    opacity: .38;
+            border:
+                1px solid
+                rgba(255,255,255,.06);
 
-    cursor: default;
-}
+            font-size: 14px;
 
+            text-align: center;
 
-/* =========================================================
-   CHOICES
-========================================================= */
+            animation:
+                pulse
+                1.4s
+                ease-in-out
+                infinite;
+        }
 
-.choice {
+        @keyframes pulse {
 
-    position: relative;
+            0%,
+            100% {
+                opacity: .45;
+            }
 
-    min-height: 57px;
+            50% {
+                opacity: 1;
+            }
 
-    display: flex;
+        }
 
-    align-items: center;
 
-    margin-bottom: 10px;
+        /* =========================================================
+           SUCCESS
+        ========================================================= */
 
-    padding:
-        15px 18px;
+        .success {
 
-    border-radius: 18px;
+            min-height:
+                calc(
+                    100vh - 120px
+                );
 
-    border:
-        1px solid
-        rgba(255,255,255,.08);
+            display: flex;
 
-    background:
+            flex-direction: column;
 
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.07),
-            rgba(255,255,255,.035)
-        );
+            align-items: center;
+            justify-content: center;
 
-    color:
-        rgba(245,245,247,.86);
+            text-align: center;
 
-    font-size: 16px;
+            padding: 60px 20px;
+        }
 
-    font-weight: 600;
+        .success-icon {
 
-    backdrop-filter:
-        blur(20px);
+            width: 88px;
+            height: 88px;
 
-    -webkit-backdrop-filter:
-        blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    transition:
-        .2s ease;
-}
+            margin-bottom: 24px;
 
-.choice.selected {
+            border-radius: 30px;
 
-    border-color:
-        rgba(255,128,0,.55);
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,128,0,.22),
+                    rgba(255,255,255,.055)
+                );
 
-    background:
+            border:
+                1px solid
+                rgba(255,128,0,.25);
 
-        linear-gradient(
-            135deg,
-            rgba(255,128,0,.25),
-            rgba(255,128,0,.08)
-        );
+            box-shadow:
+                inset 0 1px 0
+                    rgba(255,255,255,.08),
+                0 15px 45px
+                    rgba(255,128,0,.12);
 
-    box-shadow:
-        0 0 20px
-        rgba(255,105,0,.10);
-}
+            font-size: 42px;
 
-.choice.selected::after {
+            animation:
+                successPop
+                .5s
+                cubic-bezier(.22,1,.36,1);
+        }
 
-    content:
-        "✓";
+        @keyframes successPop {
 
-    position: absolute;
+            from {
+                opacity: 0;
+                transform: scale(.65);
+            }
 
-    right: 17px;
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
 
-    color:
-        #ff9638;
+        }
 
-    font-weight: 800;
-}
+        .success h2 {
+            margin-bottom: 8px;
+        }
 
+        .success .subtitle {
+            margin-bottom: 0;
+        }
 
-/* =========================================================
-   MEDIA
-========================================================= */
 
-.upload-buttons {
+        /* =========================================================
+           MOBILE
+        ========================================================= */
 
-    display: grid;
+        @media (max-width: 430px) {
 
-    grid-template-columns:
-        1fr 1fr;
+            .app {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
 
-    gap: 10px;
+            h1 {
+                font-size: 30px;
+            }
 
-    margin-top: 15px;
-}
+            h2 {
+                font-size: 27px;
+            }
 
-.upload-buttons button {
+            .subtitle {
+                font-size: 15px;
+                margin-bottom: 23px;
+            }
 
-    margin-top: 0;
+            input,
+            textarea {
+                font-size: 16px;
+            }
 
-    min-height: 54px;
+            button {
+                font-size: 16px;
+            }
 
-    font-size: 14px;
-}
+            .preview {
+                gap: 9px;
+            }
 
-.media-counter {
+            .file-card img,
+            .file-card video {
+                height: 132px;
+            }
 
-    margin-top: 12px;
+        }
 
-    padding: 11px;
 
-    border-radius: 14px;
+        /* =========================================================
+           REDUCE MOTION
+        ========================================================= */
 
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+        @media (prefers-reduced-motion: reduce) {
 
-    background:
-        rgba(255,255,255,.045);
+            *,
+            *::before,
+            *::after {
 
-    text-align: center;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
 
-    color:
-        rgba(235,235,245,.55);
+                transition-duration: .01ms !important;
+            }
 
-    font-size: 13px;
+        }
 
-    font-weight: 650;
-}
-
-.media-counter.limit {
-
-    color:
-        #ff9638;
-
-    border-color:
-        rgba(255,128,0,.25);
-}
-
-.media-hint {
-
-    margin-top: 12px;
-
-    padding:
-        10px 12px;
-
-    border-radius: 13px;
-
-    color:
-        #ff9638;
-
-    background:
-        rgba(255,128,0,.07);
-
-    border:
-        1px solid
-        rgba(255,128,0,.13);
-
-    font-size: 12px;
-
-    line-height: 1.4;
-}
-
-
-/* =========================================================
-   FILE PREVIEW
-========================================================= */
-
-.preview {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 10px;
-
-    margin-top: 15px;
-}
-
-.file-card {
-
-    position: relative;
-
-    overflow: hidden;
-
-    border-radius: 17px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.09);
-
-    background:
-        rgba(255,255,255,.05);
-
-    box-shadow:
-        0 9px 27px
-        rgba(0,0,0,.25);
-}
-
-.file-card img,
-.file-card video {
-
-    width: 100%;
-
-    height: 145px;
-
-    display: block;
-
-    object-fit: cover;
-
-    background:
-        #0b0c0e;
-}
-
-.file-name {
-
-    padding:
-        8px 9px 2px;
-
-    color:
-        rgba(245,245,247,.78);
-
-    font-size: 10px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.file-size {
-
-    padding:
-        2px 9px 9px;
-
-    color:
-        rgba(235,235,245,.35);
-
-    font-size: 9px;
-}
-
-.video-badge {
-
-    position: absolute;
-
-    left: 7px;
-    top: 7px;
-
-    padding:
-        5px 8px;
-
-    border-radius: 9px;
-
-    background:
-        rgba(0,0,0,.60);
-
-    font-size: 10px;
-}
-
-.delete-file {
-
-    position: absolute;
-
-    right: 7px;
-    top: 7px;
-
-    z-index: 5;
-
-    width: 29px;
-
-    min-height: 29px;
-
-    height: 29px;
-
-    margin: 0;
-
-    padding: 0;
-
-    border-radius: 50%;
-
-    background:
-        rgba(0,0,0,.65);
-
-    border:
-        1px solid
-        rgba(255,255,255,.15);
-
-    box-shadow: none;
-
-    font-size: 19px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-.summary {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 9px;
-
-    margin-bottom: 17px;
-}
-
-.summary-row {
-
-    padding:
-        13px 15px;
-
-    border-radius: 16px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.075);
-
-    background:
-
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.065),
-            rgba(255,255,255,.03)
-        );
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,.045);
-}
-
-.summary-title {
-
-    margin-bottom: 4px;
-
-    color:
-        rgba(235,235,245,.39);
-
-    font-size: 11px;
-
-    text-transform: uppercase;
-
-    letter-spacing: .04em;
-
-    font-weight: 650;
-}
-
-.summary-value {
-
-    color:
-        rgba(250,250,252,.92);
-
-    font-size: 15px;
-
-    line-height: 1.35;
-
-    word-break: break-word;
-}
-
-.summary-row:last-child {
-
-    border-color:
-        rgba(255,128,0,.20);
-
-    background:
-
-        linear-gradient(
-            135deg,
-            rgba(255,128,0,.10),
-            rgba(255,255,255,.03)
-        );
-}
-
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading {
-
-    display: none;
-
-    margin-top: 12px;
-
-    padding: 12px;
-
-    border-radius: 14px;
-
-    text-align: center;
-
-    color:
-        rgba(235,235,245,.54);
-
-    background:
-        rgba(255,255,255,.045);
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   SUCCESS
-========================================================= */
-
-.success {
-
-    min-height:
-        calc(100vh - 100px);
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-}
-
-.success-icon {
-
-    width: 88px;
-
-    height: 88px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    margin-bottom: 23px;
-
-    border-radius: 28px;
-
-    border:
-        1px solid
-        rgba(255,128,0,.30);
-
-    background:
-
-        linear-gradient(
-            135deg,
-            rgba(255,128,0,.23),
-            rgba(255,255,255,.04)
-        );
-
-    box-shadow:
-        0 0 35px
-        rgba(255,105,0,.15);
-
-    font-size: 42px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 430px) {
-
-    .welcome {
-        padding-top: 4px;
-    }
-
-    .welcome-banner {
-        border-radius: 22px;
-    }
-
-    .welcome-button {
-
-        min-height: 68px;
-
-        font-size: 18px;
-
-        border-radius: 22px;
-    }
-
-    .welcome-arrow {
-        right: 18px;
-    }
-
-    h1 {
-        font-size: 31px;
-    }
-
-    h2 {
-        font-size: 27px;
-    }
-
-    .preview {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-</style>
+    </style>
 
 </head>
 
 
 <body>
 
-
 <div class="app">
 
 
-<!-- =========================================================
-     WELCOME SCREEN
-========================================================= -->
-
-<section
-    id="welcomeScreen"
-    class="welcome"
->
-
-    <div class="welcome-banner">
-
-        <!--
-            ВАЖНО:
-            файл должен называться welcome.png
-            и лежать рядом с index.html
-        -->
-
-        <img
-            src="./welcome.png"
-            alt="Добро пожаловать"
-        >
-
-    </div>
-
-
-    <button
-        class="welcome-button"
-        onclick="startApplication()"
-    >
-
-        <span class="welcome-rocket">
-            🚀
-        </span>
-
-        <span>
-            Открыть приложение
-        </span>
-
-        <span class="welcome-arrow">
-            ›
-        </span>
-
-    </button>
-
-</section>
-
-
-
-<!-- =========================================================
-     FORM APP
-========================================================= -->
-
-<section id="formApp">
-
-
-    <div class="app-header">
-
-        <button
-            class="close-button"
-            onclick="closeMiniApp()"
-        >
-            Закрыть
-        </button>
-
-
-        <div class="app-title">
-
-            <strong>
-                Scout bot
-            </strong>
-
-            <span>
-                мини-приложение
-            </span>
-
-        </div>
-
-    </div>
-
+    <!-- =========================================================
+         PROGRESS
+    ========================================================= -->
 
     <div class="progress">
 
         <div
-            id="progressBar"
             class="progress-bar"
+            id="progressBar"
         ></div>
 
     </div>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 1
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen active"
@@ -1476,10 +1223,7 @@ button:disabled {
                 placeholder="+373..."
             >
 
-            <div
-                id="phoneHint"
-                class="hint"
-            >
+            <div class="hint">
                 Можно указать номер вручную или поделиться контактом Telegram.
             </div>
 
@@ -1487,7 +1231,6 @@ button:disabled {
 
 
         <button
-            id="contactButton"
             class="contact"
             onclick="requestPhone()"
         >
@@ -1496,7 +1239,6 @@ button:disabled {
 
 
         <button
-            class="primary"
             onclick="nextScreen(2)"
         >
             Продолжить
@@ -1505,10 +1247,9 @@ button:disabled {
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 2
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1573,24 +1314,22 @@ button:disabled {
             class="secondary"
             onclick="nextScreen(1)"
         >
-            ‹ Назад
+            Назад
         </button>
 
 
         <button
-            class="primary"
             onclick="nextScreen(3)"
         >
-            Продолжить ›
+            Продолжить
         </button>
 
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 3
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1609,7 +1348,7 @@ button:disabled {
         <div class="field">
 
             <label>
-                Дополнительно
+                Дополнить от себя
             </label>
 
             <textarea
@@ -1624,24 +1363,22 @@ button:disabled {
             class="secondary"
             onclick="nextScreen(2)"
         >
-            ‹ Назад
+            Назад
         </button>
 
 
         <button
-            class="primary"
             onclick="nextScreen(4)"
         >
-            Продолжить ›
+            Продолжить
         </button>
 
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 4
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1663,11 +1400,10 @@ button:disabled {
                 Гражданство
             </label>
 
-            <input
+            <textarea
                 id="citizenship"
-                type="text"
-                placeholder="Например, Молдова"
-            >
+                placeholder="Например: Казахстан"
+            ></textarea>
 
         </div>
 
@@ -1676,24 +1412,22 @@ button:disabled {
             class="secondary"
             onclick="nextScreen(3)"
         >
-            ‹ Назад
+            Назад
         </button>
 
 
         <button
-            class="primary"
             onclick="nextScreen(5)"
         >
-            Продолжить ›
+            Продолжить
         </button>
 
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 5
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1711,33 +1445,33 @@ button:disabled {
 
         <div
             class="choice"
-            onclick="selectInterest(this,'1 пункт')"
+            onclick="selectInterest(this, '1 пункт')"
         >
-            👑 1 пункт
+            1 пункт
         </div>
 
 
         <div
             class="choice"
-            onclick="selectInterest(this,'2 пункт')"
+            onclick="selectInterest(this, '2 пункт')"
         >
-            🔥 2 пункт
+            2 пункт
         </div>
 
 
         <div
             class="choice"
-            onclick="selectInterest(this,'3 пункт')"
+            onclick="selectInterest(this, '3 пункт')"
         >
-            ☆ 3 пункт
+            3 пункт
         </div>
 
 
         <div
             class="choice"
-            onclick="selectInterest(this,'4 пункт')"
+            onclick="selectInterest(this, '4 пункт')"
         >
-            ♥ 4 пункт
+            4 пункт
         </div>
 
 
@@ -1745,24 +1479,22 @@ button:disabled {
             class="secondary"
             onclick="nextScreen(4)"
         >
-            ‹ Назад
+            Назад
         </button>
 
 
         <button
-            class="primary"
             onclick="nextScreen(6)"
         >
-            Продолжить ›
+            Продолжить
         </button>
 
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 6
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1780,7 +1512,7 @@ button:disabled {
 
         <div
             id="mediaHint"
-            class="media-hint"
+            class="hint"
         >
             ⚠️ Добавьте хотя бы одно фото или видео. Максимум — 10 файлов.
         </div>
@@ -1798,11 +1530,8 @@ button:disabled {
 
             <button
                 id="photoButton"
-                onclick="
-                    document
-                    .getElementById('photoInput')
-                    .click()
-                "
+                type="button"
+                onclick="document.getElementById('photoInput').click()"
             >
                 📷 Добавить фото
             </button>
@@ -1810,11 +1539,8 @@ button:disabled {
 
             <button
                 id="videoButton"
-                onclick="
-                    document
-                    .getElementById('videoInput')
-                    .click()
-                "
+                type="button"
+                onclick="document.getElementById('videoInput').click()"
             >
                 🎥 Добавить видео
             </button>
@@ -1827,7 +1553,7 @@ button:disabled {
             type="file"
             accept="image/*"
             multiple
-            hidden
+            style="display:none;"
             onchange="handleFiles(this.files)"
         >
 
@@ -1837,7 +1563,7 @@ button:disabled {
             type="file"
             accept="video/*"
             multiple
-            hidden
+            style="display:none;"
             onchange="handleFiles(this.files)"
         >
 
@@ -1852,24 +1578,22 @@ button:disabled {
             class="secondary"
             onclick="nextScreen(5)"
         >
-            ‹ Назад
+            Назад
         </button>
 
 
         <button
-            class="primary"
             onclick="goToSummary()"
         >
-            Продолжить ›
+            Продолжить
         </button>
 
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SCREEN 7
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1881,7 +1605,7 @@ button:disabled {
         </h2>
 
         <div class="subtitle">
-            Перед отправкой убедитесь, что всё указано правильно.
+            Перед отправкой убедитесь, что все данные указаны правильно.
         </div>
 
 
@@ -1895,16 +1619,15 @@ button:disabled {
             class="secondary"
             onclick="nextScreen(6)"
         >
-            ‹ Назад
+            Назад
         </button>
 
 
         <button
             id="submitButton"
-            class="primary"
             onclick="submitForm()"
         >
-            🚀 Отправить анкету
+            Отправить анкету
         </button>
 
 
@@ -1912,16 +1635,15 @@ button:disabled {
             id="loading"
             class="loading"
         >
-            Отправляем анкету…
+            Отправляем анкету...
         </div>
 
     </section>
 
 
-
-    <!-- =====================================================
+    <!-- =========================================================
          SUCCESS
-    ====================================================== -->
+    ========================================================= -->
 
     <section
         class="screen"
@@ -1947,1149 +1669,75 @@ button:disabled {
     </section>
 
 
-</section>
-
 </div>
-
 
 
 <script>
 
-/* =========================================================
-   TELEGRAM
-========================================================= */
 
-const tg =
-    window.Telegram?.WebApp;
+    /* =========================================================
+       TELEGRAM
+    ========================================================= */
 
+    const tg =
+        window.Telegram?.WebApp;
 
-if (tg) {
-
-    tg.ready();
-
-    tg.expand();
-
-}
-
-
-/* =========================================================
-   WORKER
-========================================================= */
-
-const WORKER_URL =
-    "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev";
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let currentScreen = 1;
-
-let selectedFiles = [];
-
-let interest = "";
-
-let phoneLoading = false;
-
-let submitted = false;
-
-
-const user =
-    tg?.initDataUnsafe?.user ||
-    null;
-
-
-/* =========================================================
-   START
-========================================================= */
-
-function startApplication() {
-
-    document
-        .getElementById("welcomeScreen")
-        .style.display = "none";
-
-
-    document
-        .getElementById("formApp")
-        .style.display = "block";
-
-
-    currentScreen = 1;
-
-    updateProgress();
-
-}
-
-
-/* =========================================================
-   CLOSE
-========================================================= */
-
-function closeMiniApp() {
 
     if (tg) {
 
-        tg.close();
+        tg.ready();
 
-    }
-
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-function updateProgress() {
-
-    const bar =
-        document.getElementById(
-            "progressBar"
-        );
-
-
-    if (!bar) return;
-
-
-    const percent =
-        currentScreen *
-        14.2857;
-
-
-    bar.style.width =
-        Math.min(
-            percent,
-            100
-        ) + "%";
-
-}
-
-
-/* =========================================================
-   SCREEN
-========================================================= */
-
-function nextScreen(number) {
-
-    document
-        .querySelectorAll(
-            ".screen"
-        )
-        .forEach(
-            screen => {
-
-                screen.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    const target =
-        document.getElementById(
-            "screen" + number
-        );
-
-
-    if (!target) return;
-
-
-    target.classList.add(
-        "active"
-    );
-
-
-    currentScreen =
-        number;
-
-
-    updateProgress();
-
-
-    if (
-        number === 7
-    ) {
-
-        buildSummary();
-
-    }
-
-}
-
-
-/* =========================================================
-   INTEREST
-========================================================= */
-
-function selectInterest(
-    element,
-    value
-) {
-
-    document
-        .querySelectorAll(
-            ".choice"
-        )
-        .forEach(
-            item => {
-
-                item.classList.remove(
-                    "selected"
-                );
-
-            }
-        );
-
-
-    element.classList.add(
-        "selected"
-    );
-
-
-    interest =
-        value;
-
-}
-
-
-/* =========================================================
-   PHONE
-========================================================= */
-
-function requestPhone() {
-
-    if (!tg) {
-
-        alert(
-            "Откройте приложение внутри Telegram."
-        );
-
-        return;
+        tg.expand();
 
     }
 
 
-    const button =
-        document.getElementById(
-            "contactButton"
-        );
+    /* =========================================================
+       VARIABLES
+    ========================================================= */
 
+    let currentScreen = 1;
 
-    const hint =
-        document.getElementById(
-            "phoneHint"
-        );
+    let selectedFiles = [];
 
+    let interest = "";
 
-    if (phoneLoading) {
-        return;
-    }
 
+    const user =
+        tg?.initDataUnsafe?.user ||
+        null;
 
-    phoneLoading = true;
 
+    /* =========================================================
+       PROGRESS
+    ========================================================= */
 
-    button.disabled =
-        true;
+    function updateProgress() {
 
-
-    button.textContent =
-        "Запрашиваем номер…";
-
-
-    hint.textContent =
-        "Подтвердите передачу номера в Telegram.";
-
-
-    try {
-
-        tg.requestContact(
-            function(success) {
-
-                phoneLoading =
-                    false;
-
-
-                button.disabled =
-                    false;
-
-
-                if (success) {
-
-                    button.textContent =
-                        "✓ Номер отправлен";
-
-
-                    button.classList.add(
-                        "success-contact"
-                    );
-
-
-                    hint.textContent =
-                        "Номер сохранён. При отправке анкеты он будет добавлен автоматически.";
-
-                }
-
-                else {
-
-                    button.textContent =
-                        "📱 Поделиться номером Telegram";
-
-
-                    hint.textContent =
-                        "Можно указать номер вручную или поделиться контактом Telegram.";
-
-                }
-
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        phoneLoading =
-            false;
-
-
-        button.disabled =
-            false;
-
-
-        button.textContent =
-            "📱 Поделиться номером Telegram";
-
-
-        hint.textContent =
-            "Не удалось запросить номер. Попробуйте ещё раз.";
-
-    }
-
-}
-
-
-/* =========================================================
-   FILES
-========================================================= */
-
-function handleFiles(files) {
-
-    const incoming =
-        Array.from(files);
-
-
-    const available =
-        10 -
-        selectedFiles.length;
-
-
-    if (
-        available <= 0
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-        return;
-
-    }
-
-
-    selectedFiles =
-        selectedFiles.concat(
-            incoming.slice(
-                0,
-                available
-            )
-        );
-
-
-    if (
-        incoming.length >
-        available
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-    }
-
-
-    renderFiles();
-
-}
-
-
-/* =========================================================
-   FILE SIZE
-========================================================= */
-
-function formatFileSize(bytes) {
-
-    if (!bytes) {
-        return "0 KB";
-    }
-
-
-    const units = [
-        "B",
-        "KB",
-        "MB",
-        "GB"
-    ];
-
-
-    const index =
-        Math.floor(
-            Math.log(bytes) /
-            Math.log(1024)
-        );
-
-
-    const size =
-        bytes /
-        Math.pow(
-            1024,
-            index
-        );
-
-
-    return (
-        size.toFixed(
-            index === 0
-                ? 0
-                : 1
-        ) +
-        " " +
-        units[index]
-    );
-
-}
-
-
-/* =========================================================
-   FILE PREVIEW
-========================================================= */
-
-function renderFiles() {
-
-    const preview =
-        document.getElementById(
-            "preview"
-        );
-
-
-    preview.innerHTML =
-        "";
-
-
-    const counter =
-        document.getElementById(
-            "mediaCounter"
-        );
-
-
-    const photoButton =
-        document.getElementById(
-            "photoButton"
-        );
-
-
-    const videoButton =
-        document.getElementById(
-            "videoButton"
-        );
-
-
-    counter.textContent =
-        selectedFiles.length +
-        " / 10 файлов";
-
-
-    counter.classList.toggle(
-        "limit",
-        selectedFiles.length === 10
-    );
-
-
-    const limit =
-        selectedFiles.length >= 10;
-
-
-    photoButton.disabled =
-        limit;
-
-
-    videoButton.disabled =
-        limit;
-
-
-    selectedFiles.forEach(
-        (
-            file,
-            index
-        ) => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "file-card";
-
-
-            const remove =
-                document.createElement(
-                    "button"
-                );
-
-
-            remove.className =
-                "delete-file";
-
-
-            remove.innerHTML =
-                "×";
-
-
-            remove.onclick =
-                () => {
-
-                    selectedFiles.splice(
-                        index,
-                        1
-                    );
-
-                    renderFiles();
-
-                };
-
-
-            card.appendChild(
-                remove
+        const progressBar =
+            document.getElementById(
+                "progressBar"
             );
 
 
-            if (
-                file.type.startsWith(
-                    "image/"
-                )
-            ) {
-
-                const img =
-                    document.createElement(
-                        "img"
-                    );
-
-
-                img.src =
-                    URL.createObjectURL(
-                        file
-                    );
-
-
-                card.appendChild(
-                    img
-                );
-
-            }
-
-            else if (
-                file.type.startsWith(
-                    "video/"
-                )
-            ) {
-
-                const video =
-                    document.createElement(
-                        "video"
-                    );
-
-
-                video.src =
-                    URL.createObjectURL(
-                        file
-                    );
-
-
-                video.controls =
-                    true;
-
-
-                video.playsInline =
-                    true;
-
-
-                card.appendChild(
-                    video
-                );
-
-
-                const badge =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                badge.className =
-                    "video-badge";
-
-
-                badge.textContent =
-                    "▶ Видео";
-
-
-                card.appendChild(
-                    badge
-                );
-
-            }
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "file-name";
-
-
-            name.textContent =
-                file.name;
-
-
-            card.appendChild(
-                name
+        const percent =
+            Math.min(
+                currentScreen * 14,
+                100
             );
 
 
-            const size =
-                document.createElement(
-                    "div"
-                );
-
-
-            size.className =
-                "file-size";
-
-
-            size.textContent =
-                formatFileSize(
-                    file.size
-                );
-
-
-            card.appendChild(
-                size
-            );
-
-
-            preview.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-function goToSummary() {
-
-    if (
-        selectedFiles.length === 0
-    ) {
-
-        alert(
-            "⚠️ Добавьте хотя бы одно фото или видео."
-        );
-
-        return;
+        progressBar.style.width =
+            percent + "%";
 
     }
 
 
-    if (
-        selectedFiles.length > 10
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-        return;
-
-    }
-
-
-    nextScreen(7);
-
-}
-
-
-/* =========================================================
-   ESCAPE
-========================================================= */
-
-function escapeHtml(value) {
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-function buildSummary() {
-
-    const name =
-        document.getElementById(
-            "name"
-        ).value ||
-        "не указано";
-
-
-    const phone =
-        document.getElementById(
-            "phone"
-        ).value ||
-        "будет добавлен автоматически";
-
-
-    const height =
-        document.getElementById(
-            "height"
-        ).value ||
-        "не указано";
-
-
-    const weight =
-        document.getElementById(
-            "weight"
-        ).value ||
-        "не указано";
-
-
-    const age =
-        document.getElementById(
-            "age"
-        ).value ||
-        "не указано";
-
-
-    const additional =
-        document.getElementById(
-            "additional"
-        ).value ||
-        "не указано";
-
-
-    const citizenship =
-        document.getElementById(
-            "citizenship"
-        ).value ||
-        "не указано";
-
-
-    const username =
-        user?.username
-            ? "@" + user.username
-            : "не указан";
-
-
-    document.getElementById(
-        "summary"
-    ).innerHTML = `
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Имя
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(name)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Telegram
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(username)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Телефон
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(phone)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Рост
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(height)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Вес
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(weight)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Возраст
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(age)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Гражданство
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(citizenship)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Интерес
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(
-                    interest ||
-                    "не указан"
-                )}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Дополнительно
-            </div>
-
-            <div class="summary-value">
-                ${escapeHtml(additional)}
-            </div>
-
-        </div>
-
-
-        <div class="summary-row">
-
-            <div class="summary-title">
-                Материалы
-            </div>
-
-            <div class="summary-value">
-                📎 ${selectedFiles.length} файлов
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   SUBMIT
-========================================================= */
-
-async function submitForm() {
-
-    if (submitted) {
-        return;
-    }
-
-
-    if (
-        selectedFiles.length === 0
-    ) {
-
-        alert(
-            "Добавьте хотя бы одно фото или видео."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        selectedFiles.length > 10
-    ) {
-
-        alert(
-            "Можно загрузить максимум 10 файлов."
-        );
-
-        return;
-
-    }
-
-
-    const button =
-        document.getElementById(
-            "submitButton"
-        );
-
-
-    const loading =
-        document.getElementById(
-            "loading"
-        );
-
-
-    submitted =
-        true;
-
-
-    button.disabled =
-        true;
-
-
-    button.textContent =
-        "Отправляем…";
-
-
-    loading.style.display =
-        "block";
-
-
-    try {
-
-        const initData =
-            tg?.initData ||
-            "";
-
-
-        if (!initData) {
-
-            throw new Error(
-                "Приложение должно быть открыто внутри Telegram."
-            );
-
-        }
-
-
-        const application = {
-
-            type:
-                "application",
-
-            telegram_id:
-                user?.id ||
-                null,
-
-            telegram_username:
-                user?.username ||
-                null,
-
-            name:
-                document.getElementById(
-                    "name"
-                ).value,
-
-            phone:
-                document.getElementById(
-                    "phone"
-                ).value,
-
-            height:
-                document.getElementById(
-                    "height"
-                ).value,
-
-            weight:
-                document.getElementById(
-                    "weight"
-                ).value,
-
-            age:
-                document.getElementById(
-                    "age"
-                ).value,
-
-            additional:
-                document.getElementById(
-                    "additional"
-                ).value,
-
-            citizenship:
-                document.getElementById(
-                    "citizenship"
-                ).value,
-
-            interest:
-                interest,
-
-            files_count:
-                selectedFiles.length,
-
-            submitted_at:
-                new Date()
-                    .toISOString()
-
-        };
-
-
-        const formData =
-            new FormData();
-
-
-        formData.append(
-            "initData",
-            initData
-        );
-
-
-        formData.append(
-            "application",
-            JSON.stringify(
-                application
-            )
-        );
-
-
-        selectedFiles.forEach(
-            file => {
-
-                formData.append(
-                    "files",
-                    file,
-                    file.name
-                );
-
-            }
-        );
-
-
-        const response =
-            await fetch(
-                WORKER_URL,
-                {
-                    method:
-                        "POST",
-
-                    body:
-                        formData
-                }
-            );
-
-
-        const result =
-            await response.text();
-
-
-        console.log(
-            "SERVER:",
-            result
-        );
-
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                result ||
-                "Ошибка отправки"
-            );
-
-        }
-
+    /* =========================================================
+       SCREEN SWITCH
+    ========================================================= */
+
+    function nextScreen(screenNumber) {
 
         document
             .querySelectorAll(
@@ -3106,67 +1754,1106 @@ async function submitForm() {
             );
 
 
-        document
-            .getElementById(
-                "successScreen"
-            )
-            .classList.add(
-                "active"
+        const target =
+            document.getElementById(
+                "screen" +
+                screenNumber
             );
 
 
-        document
-            .getElementById(
-                "progressBar"
-            )
-            .style.width =
-            "100%";
+        if (target) {
+
+            target.classList.add(
+                "active"
+            );
+
+        }
+
+
+        currentScreen =
+            screenNumber;
+
+
+        updateProgress();
+
+
+        if (
+            screenNumber === 7
+        ) {
+
+            buildSummary();
+
+        }
 
     }
 
-    catch (error) {
 
-        console.error(
-            error
+    /* =========================================================
+       TELEGRAM PHONE
+    ========================================================= */
+
+    function requestPhone() {
+
+        if (!tg) {
+
+            alert(
+                "Telegram WebApp недоступен."
+            );
+
+            return;
+
+        }
+
+
+        tg.requestContact(
+            function(success) {
+
+                if (!success) {
+
+                    return;
+
+                }
+
+
+                alert(
+                    "Номер телефона сохранён."
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       INTEREST
+    ========================================================= */
+
+    function selectInterest(
+        element,
+        value
+    ) {
+
+        document
+            .querySelectorAll(
+                ".choice"
+            )
+            .forEach(
+                choice => {
+
+                    choice.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+        element.classList.add(
+            "selected"
         );
 
 
-        submitted =
-            false;
+        interest =
+            value;
+
+    }
 
 
-        button.disabled =
-            false;
+    /* =========================================================
+       FILES
+    ========================================================= */
+
+    function handleFiles(
+        files
+    ) {
+
+        const incoming =
+            Array.from(files);
 
 
-        button.textContent =
-            "🚀 Отправить анкету";
+        const availableSlots =
+            10 -
+            selectedFiles.length;
+
+
+        if (
+            availableSlots <= 0
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        const filesToAdd =
+            incoming.slice(
+                0,
+                availableSlots
+            );
+
+
+        selectedFiles =
+            selectedFiles.concat(
+                filesToAdd
+            );
+
+
+        if (
+            incoming.length >
+            availableSlots
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+        }
+
+
+        renderFiles();
+
+    }
+
+
+    /* =========================================================
+       FILE SIZE
+    ========================================================= */
+
+    function formatFileSize(
+        bytes
+    ) {
+
+        if (!bytes) {
+
+            return "0 KB";
+
+        }
+
+
+        const units = [
+            "B",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+
+        const index =
+            Math.floor(
+                Math.log(bytes) /
+                Math.log(1024)
+            );
+
+
+        const size =
+            bytes /
+            Math.pow(
+                1024,
+                index
+            );
+
+
+        return (
+            size.toFixed(
+                index === 0 ? 0 : 1
+            ) +
+            " " +
+            units[index]
+        );
+
+    }
+
+
+    /* =========================================================
+       RENDER FILES
+    ========================================================= */
+
+    function renderFiles() {
+
+        const preview =
+            document.getElementById(
+                "preview"
+            );
+
+
+        const mediaHint =
+            document.getElementById(
+                "mediaHint"
+            );
+
+
+        preview.innerHTML =
+            "";
+
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            mediaHint.style.display =
+                "block";
+
+        }
+
+        else {
+
+            mediaHint.style.display =
+                "block";
+
+            mediaHint.style.display =
+                "none";
+
+        }
+
+
+        const mediaCounter =
+            document.getElementById(
+                "mediaCounter"
+            );
+
+
+        const photoButton =
+            document.getElementById(
+                "photoButton"
+            );
+
+
+        const videoButton =
+            document.getElementById(
+                "videoButton"
+            );
+
+
+        /* COUNTER */
+
+        if (mediaCounter) {
+
+            mediaCounter.textContent =
+                selectedFiles.length +
+                " / 10 файлов";
+
+
+            mediaCounter.classList.toggle(
+                "limit",
+                selectedFiles.length === 10
+            );
+
+        }
+
+
+        /* BUTTON LIMIT */
+
+        const limitReached =
+            selectedFiles.length >= 10;
+
+
+        if (photoButton) {
+
+            photoButton.disabled =
+                limitReached;
+
+        }
+
+
+        if (videoButton) {
+
+            videoButton.disabled =
+                limitReached;
+
+        }
+
+
+        /* PREVIEW */
+
+        selectedFiles.forEach(
+            (
+                file,
+                index
+            ) => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "file-card";
+
+
+                /* DELETE */
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                deleteButton.className =
+                    "delete-file";
+
+
+                deleteButton.type =
+                    "button";
+
+
+                deleteButton.innerHTML =
+                    "×";
+
+
+                deleteButton.onclick =
+                    function() {
+
+                        selectedFiles.splice(
+                            index,
+                            1
+                        );
+
+
+                        renderFiles();
+
+                    };
+
+
+                card.appendChild(
+                    deleteButton
+                );
+
+
+                /* IMAGE */
+
+                if (
+                    file.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    image.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    card.appendChild(
+                        image
+                    );
+
+                }
+
+
+                /* VIDEO */
+
+                else if (
+                    file.type.startsWith(
+                        "video/"
+                    )
+                ) {
+
+                    const video =
+                        document.createElement(
+                            "video"
+                        );
+
+
+                    video.src =
+                        URL.createObjectURL(
+                            file
+                        );
+
+
+                    video.controls =
+                        true;
+
+
+                    video.playsInline =
+                        true;
+
+
+                    card.appendChild(
+                        video
+                    );
+
+
+                    const badge =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    badge.className =
+                        "video-badge";
+
+
+                    badge.textContent =
+                        "▶ Видео";
+
+
+                    card.appendChild(
+                        badge
+                    );
+
+                }
+
+
+                /* FILE NAME */
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "file-name";
+
+
+                name.textContent =
+                    file.name;
+
+
+                card.appendChild(
+                    name
+                );
+
+
+                /* FILE SIZE */
+
+                const size =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                size.className =
+                    "file-size";
+
+
+                size.textContent =
+                    formatFileSize(
+                        file.size
+                    );
+
+
+                card.appendChild(
+                    size
+                );
+
+
+                preview.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       GO TO SUMMARY
+    ========================================================= */
+
+    function goToSummary() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            return;
+
+        }
+
+
+        nextScreen(7);
+
+    }
+
+
+    /* =========================================================
+       SUMMARY
+    ========================================================= */
+
+    function buildSummary() {
+
+        const name =
+            document.getElementById(
+                "name"
+            ).value ||
+            "не указано";
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value ||
+            "не указан";
+
+
+        const height =
+            document.getElementById(
+                "height"
+            ).value ||
+            "не указано";
+
+
+        const weight =
+            document.getElementById(
+                "weight"
+            ).value ||
+            "не указано";
+
+
+        const age =
+            document.getElementById(
+                "age"
+            ).value ||
+            "не указано";
+
+
+        const additional =
+            document.getElementById(
+                "additional"
+            ).value ||
+            "не указано";
+
+
+        const citizenship =
+            document.getElementById(
+                "citizenship"
+            ).value ||
+            "не указано";
+
+
+        const username =
+            user?.username
+                ? "@" + user.username
+                : "не указан";
+
+
+        const telegramId =
+            user?.id ||
+            "не указан";
+
+
+        document.getElementById(
+            "summary"
+        ).innerHTML = `
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Имя
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(name)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Telegram username
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(username)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Telegram ID
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(
+                        String(telegramId)
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Телефон
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(phone)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Рост
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(height)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Вес
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(weight)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Возраст
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(age)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Дополнительно
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(additional)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Гражданство
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(citizenship)}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Интерес
+                </div>
+
+                <div class="summary-value">
+                    ${escapeHtml(
+                        interest ||
+                        "не указан"
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <div class="summary-title">
+                    Материалы
+                </div>
+
+                <div class="summary-value">
+                    📎 ${selectedFiles.length} файлов
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       HTML SECURITY
+    ========================================================= */
+
+    function escapeHtml(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =========================================================
+       SUBMIT
+    ========================================================= */
+
+    async function submitForm() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+
+            alert(
+                "⚠️ Добавьте хотя бы одно фото или видео перед отправкой анкеты."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        if (
+            selectedFiles.length > 10
+        ) {
+
+            alert(
+                "Можно загрузить максимум 10 файлов."
+            );
+
+            nextScreen(6);
+
+            return;
+
+        }
+
+
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
+
+
+        const loading =
+            document.getElementById(
+                "loading"
+            );
+
+
+        submitButton.disabled =
+            true;
+
+
+        submitButton.textContent =
+            "Отправляем…";
 
 
         loading.style.display =
-            "none";
+            "block";
 
 
-        alert(
-            "Не удалось отправить анкету.\n\n" +
-            error.message
-        );
+        try {
+
+            /* TELEGRAM INIT DATA */
+
+            const initData =
+                tg?.initData || "";
+
+
+            /* APPLICATION */
+
+            const application = {
+
+                type:
+                    "application",
+
+
+                telegram_id:
+                    user?.id ||
+                    null,
+
+
+                telegram_username:
+                    user?.username ||
+                    null,
+
+
+                telegram_first_name:
+                    user?.first_name ||
+                    null,
+
+
+                telegram_last_name:
+                    user?.last_name ||
+                    null,
+
+
+                name:
+                    document.getElementById(
+                        "name"
+                    ).value,
+
+
+                phone:
+                    document.getElementById(
+                        "phone"
+                    ).value,
+
+
+                height:
+                    document.getElementById(
+                        "height"
+                    ).value,
+
+
+                weight:
+                    document.getElementById(
+                        "weight"
+                    ).value,
+
+
+                age:
+                    document.getElementById(
+                        "age"
+                    ).value,
+
+
+                additional:
+                    document.getElementById(
+                        "additional"
+                    ).value,
+
+
+                citizenship:
+                    document.getElementById(
+                        "citizenship"
+                    ).value,
+
+
+                interest:
+                    interest,
+
+
+                files_count:
+                    selectedFiles.length,
+
+
+                submitted_at:
+                    new Date()
+                        .toISOString()
+
+            };
+
+
+            /* FORMDATA */
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "initData",
+                initData
+            );
+
+
+            formData.append(
+                "application",
+                JSON.stringify(
+                    application
+                )
+            );
+
+
+            /* FILES */
+
+            selectedFiles.forEach(
+                file => {
+
+                    formData.append(
+                        "files",
+                        file,
+                        file.name
+                    );
+
+                }
+            );
+
+
+            /* CLOUDFLARE WORKER */
+
+            const response =
+                await fetch(
+                    "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev",
+                    {
+                        method:
+                            "POST",
+
+                        body:
+                            formData
+                    }
+                );
+
+
+            const result =
+                await response.text();
+
+
+            console.log(
+                "SERVER RESPONSE:",
+                result
+            );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    result ||
+                    "Ошибка отправки"
+                );
+
+            }
+
+
+            /* SUCCESS */
+
+            document
+                .querySelectorAll(
+                    ".screen"
+                )
+                .forEach(
+                    screen => {
+
+                        screen.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "successScreen"
+                )
+                .classList.add(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "progressBar"
+                )
+                .style.width =
+                "100%";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Не удалось отправить анкету.\n\n" +
+                error.message
+            );
+
+
+            submitButton.disabled =
+                false;
+
+
+            submitButton.textContent =
+                "Отправить анкету";
+
+
+            loading.style.display =
+                "none";
+
+        }
 
     }
 
-}
 
+    /* =========================================================
+       INITIAL RENDER
+    ========================================================= */
 
-/* =========================================================
-   INITIAL
-========================================================= */
+    renderFiles();
 
-renderFiles();
-
-updateProgress();
+    updateProgress();
 
 </script>
 
 </body>
-<!-- version 2 -->
+
 </html>
