@@ -114,6 +114,8 @@
             position: relative;
 
             width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             height: 5px;
 
             margin:
@@ -812,16 +814,21 @@
             top: 8px;
             right: 8px;
 
-            width: 31px;
-            height: 31px;
+            width: 34px !important;
+            height: 34px !important;
 
-            min-width: 31px;
+            min-width: 34px !important;
+            max-width: 34px !important;
+            min-height: 34px !important;
+            max-height: 34px !important;
+            aspect-ratio: 1 / 1;
+            flex: 0 0 34px;
 
-            margin: 0;
+            margin: 0 !important;
 
-            padding: 0;
+            padding: 0 !important;
 
-            border-radius: 50%;
+            border-radius: 50% !important;
 
             display: flex;
             align-items: center;
@@ -2094,6 +2101,8 @@
 
     let interest = "";
 
+    let submitInProgress = false;
+
 
     const user =
         tg?.initDataUnsafe?.user ||
@@ -3109,7 +3118,37 @@
        SUBMIT
     ========================================================= */
 
+    async function waitForInitData() {
+
+        for (
+            let attempt = 0;
+            attempt < 50;
+            attempt++
+        ) {
+
+            const initData =
+                tg?.initData || "";
+
+            if (initData) {
+                return initData;
+            }
+
+            await new Promise(
+                resolve =>
+                    setTimeout(resolve, 100)
+            );
+
+        }
+
+        return "";
+    }
+
+
     async function submitForm() {
+
+        if (submitInProgress) {
+            return;
+        }
 
         if (
             selectedFiles.length === 0
@@ -3153,6 +3192,10 @@
             );
 
 
+        submitInProgress =
+            true;
+
+
         submitButton.disabled =
             true;
 
@@ -3170,7 +3213,16 @@
             /* TELEGRAM INIT DATA */
 
             const initData =
-                tg?.initData || "";
+                await waitForInitData();
+
+
+            if (!initData) {
+
+                throw new Error(
+                    "Telegram не передал данные авторизации. Закройте Mini App и откройте его снова."
+                );
+
+            }
 
 
             /* APPLICATION */
@@ -3295,6 +3347,18 @@
 
             /* CLOUDFLARE WORKER */
 
+            if (
+                typeof navigator !== "undefined" &&
+                navigator.onLine === false
+            ) {
+
+                throw new Error(
+                    "Нет подключения к интернету."
+                );
+
+            }
+
+
             const response =
                 await fetch(
                     "https://telegram-mini-app-bot.wdb7hjzf97.workers.dev",
@@ -3388,6 +3452,9 @@
 
             loading.style.display =
                 "none";
+
+            submitInProgress =
+                false;
 
         }
 
