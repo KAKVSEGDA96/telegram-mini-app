@@ -26,6 +26,7 @@
         }
 
         html {
+            width: 100%;
             min-height: 100%;
             background: #08090b;
         }
@@ -34,6 +35,9 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            min-height: 100svh;
+            min-height: 100dvh;
+            width: 100%;
 
             background:
                 radial-gradient(
@@ -1583,6 +1587,24 @@
             }
         }
 
+
+
+        /* V6 — use the available Telegram webview width on tablets */
+        @media (min-width: 700px) {
+            .app {
+                width: 100%;
+                max-width: 1000px;
+                padding-left: clamp(20px, 4vw, 56px);
+                padding-right: clamp(20px, 4vw, 56px);
+            }
+        }
+
+        @supports (height: 100dvh) {
+            body {
+                min-height: 100dvh;
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             body::after {
                 transform: none !important;
@@ -2124,7 +2146,14 @@
 
         tg.ready();
 
-        tg.expand();
+        try {
+            tg.expand();
+            if (typeof tg.requestFullscreen === "function") {
+                tg.requestFullscreen();
+            }
+        } catch (error) {
+            /* Older Telegram clients may not support fullscreen requests. */
+        }
 
     }
 
@@ -2153,12 +2182,13 @@
         let v5Y = 0;
 
         window.addEventListener("pointermove", function (event) {
-            if (event.pointerType !== "mouse" && event.pointerType !== "pen") {
-                return;
+            if (event.pointerType === "touch") {
+                v5X = ((event.clientX / Math.max(window.innerWidth, 1)) - 0.5) * -4;
+                v5Y = ((event.clientY / Math.max(window.innerHeight, 1)) - 0.5) * -3;
+            } else {
+                v5X = ((event.clientX / Math.max(window.innerWidth, 1)) - 0.5) * -9;
+                v5Y = ((event.clientY / Math.max(window.innerHeight, 1)) - 0.5) * -7;
             }
-
-            v5X = ((event.clientX / Math.max(window.innerWidth, 1)) - 0.5) * -9;
-            v5Y = ((event.clientY / Math.max(window.innerHeight, 1)) - 0.5) * -7;
 
             if (!v5FramePending) {
                 v5FramePending = true;
