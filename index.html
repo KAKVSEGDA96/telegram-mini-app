@@ -1605,6 +1605,81 @@
             }
         }
 
+
+        /* V7 — Telegram fullscreen layout refinements */
+        .progress {
+            width: 100%;
+            min-width: 0;
+            overflow: clip;
+            border-radius: 999px;
+            isolation: isolate;
+        }
+
+        .progress-bar {
+            display: block;
+            max-width: 100%;
+            border-radius: inherit;
+            overflow: hidden;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            min-height: max(420px, calc(100dvh - 150px));
+        }
+
+        .screen.active > button:last-of-type {
+            margin-top: auto;
+        }
+
+        .screen.active > button.secondary {
+            flex: 0 0 auto;
+        }
+
+        @media (min-width: 700px) {
+            .app {
+                max-width: 1100px;
+            }
+
+            .screen.active {
+                min-height: calc(100dvh - 150px);
+            }
+
+            .screen.active > button.secondary {
+                margin-top: auto;
+            }
+
+            .screen.active > button.secondary + button {
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .app {
+                padding-top: max(88px, calc(env(safe-area-inset-top) + 72px));
+                padding-bottom: max(28px, env(safe-area-inset-bottom));
+            }
+
+            .progress {
+                margin-top: 0;
+                margin-bottom: 24px;
+            }
+
+            .screen.active {
+                min-height: calc(100dvh - 190px);
+            }
+
+            .screen.active > button:last-of-type {
+                margin-top: auto;
+            }
+        }
+
+        @supports not (height: 100dvh) {
+            .screen.active {
+                min-height: calc(100vh - 150px);
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             body::after {
                 transform: none !important;
