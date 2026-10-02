@@ -1211,6 +1211,13 @@
             padding-top: max(18px, env(safe-area-inset-top));
         }
 
+        .progress {
+            width: 100%;
+            max-width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
         .app::before {
             content: "";
             position: fixed;
@@ -1638,7 +1645,10 @@
 
         @media (min-width: 700px) {
             .app {
+                width: min(100%, 1100px);
                 max-width: 1100px;
+                padding-left: clamp(20px, 4vw, 56px);
+                padding-right: clamp(20px, 4vw, 56px);
             }
 
             .screen.active {
@@ -1656,13 +1666,13 @@
 
         @media (max-width: 600px) {
             .app {
-                padding-top: max(88px, calc(env(safe-area-inset-top) + 72px));
+                padding-top: max(112px, calc(env(safe-area-inset-top) + 88px));
                 padding-bottom: max(28px, env(safe-area-inset-bottom));
             }
 
             .progress {
-                margin-top: 0;
-                margin-bottom: 24px;
+                margin-top: 4px;
+                margin-bottom: 28px;
             }
 
             .screen.active {
@@ -1677,6 +1687,42 @@
         @supports not (height: 100dvh) {
             .screen.active {
                 min-height: calc(100vh - 150px);
+            }
+        }
+
+
+        /* V8 — consistent bottom action stack */
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen.active > button.secondary {
+            margin-top: auto;
+        }
+
+        .screen.active > button.secondary + button,
+        .screen.active > button.secondary + .contact + button {
+            margin-top: 10px;
+        }
+
+        .screen.active > button.secondary ~ button:last-of-type {
+            margin-top: 10px;
+        }
+
+        @media (min-width: 700px) {
+            .screen.active {
+                min-height: calc(100dvh - 170px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .app {
+                padding-top: max(112px, calc(env(safe-area-inset-top) + 88px));
+            }
+            .progress {
+                margin-top: 4px;
+                margin-bottom: 28px;
             }
         }
 
