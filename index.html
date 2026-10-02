@@ -1556,6 +1556,41 @@
                 0 12px 35px rgba(255,128,0,.10);
         }
 
+
+        /* =========================================================
+           V5 MOTION — subtle parallax and accessible motion
+        ========================================================= */
+        :root {
+            --v5-motion-x: 0px;
+            --v5-motion-y: 0px;
+        }
+
+        body::after {
+            transform: translate3d(var(--v5-motion-x), var(--v5-motion-y), 0);
+            transition: transform .35s ease-out;
+            will-change: transform;
+        }
+
+        button:focus-visible,
+        .choice:focus-visible {
+            outline: 2px solid rgba(255,145,45,.78);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 700px) {
+            body::after {
+                transition-duration: .5s;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body::after {
+                transform: none !important;
+                transition: none !important;
+                will-change: auto;
+            }
+        }
+
     </style>
 
 </head>
@@ -2094,6 +2129,48 @@
     }
 
 
+
+    /* =========================================================
+       V5 MOTION + TELEGRAM HAPTICS
+       Decorative only; form submission and Worker contract unchanged.
+    ========================================================= */
+
+    const v5ReducedMotion =
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function v5Haptic(kind = "light") {
+        try {
+            tg?.HapticFeedback?.impactOccurred(kind);
+        } catch (error) {
+            /* Haptics are optional; never interrupt the form. */
+        }
+    }
+
+    if (!v5ReducedMotion && window.matchMedia("(pointer: fine)").matches) {
+        let v5FramePending = false;
+        let v5X = 0;
+        let v5Y = 0;
+
+        window.addEventListener("pointermove", function (event) {
+            if (event.pointerType !== "mouse" && event.pointerType !== "pen") {
+                return;
+            }
+
+            v5X = ((event.clientX / Math.max(window.innerWidth, 1)) - 0.5) * -9;
+            v5Y = ((event.clientY / Math.max(window.innerHeight, 1)) - 0.5) * -7;
+
+            if (!v5FramePending) {
+                v5FramePending = true;
+                window.requestAnimationFrame(function () {
+                    document.documentElement.style.setProperty("--v5-motion-x", v5X + "px");
+                    document.documentElement.style.setProperty("--v5-motion-y", v5Y + "px");
+                    v5FramePending = false;
+                });
+            }
+        }, { passive: true });
+    }
+
     /* =========================================================
        VARIABLES
     ========================================================= */
@@ -2199,6 +2276,7 @@
 
 
         updateProgress();
+        v5Haptic("light");
 
 
         if (
@@ -2419,6 +2497,7 @@
         interest =
             value;
 
+        v5Haptic("selection");
     }
 
 
